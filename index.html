@@ -1,0 +1,2645 @@
+<!DOCTYPE html>
+<html lang="ro" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google" content="notranslate">
+<title>Cine m-a citat · Who cited me</title>
+<meta name="description" content="Vezi cine te citează, fără să cauți: indicatori (h, i10), cuartile SCImago, poziția ta între colegi și exporturi Excel, Word și CSV. Gratuit, pe date OpenAlex. / See who cites you, without searching.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.openalex.org https://api.web3forms.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="canonical" href="https://SITE-URL/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cine m-a citat">
+<meta property="og:title" content="Cine m-a citat · Who cited me">
+<meta property="og:description" content="Vezi cine te citează, fără să cauți: indicatori (h, i10), cuartile SCImago, poziția ta între colegi și exporturi Excel, Word și CSV. Gratuit, pe date OpenAlex. / See who cites you, without searching.">
+<meta property="og:url" content="https://SITE-URL/">
+<meta property="og:image" content="https://SITE-URL/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Cine m-a citat: vezi cine te citează, fără să cauți">
+<meta property="og:locale" content="ro_RO">
+<meta property="og:locale:alternate" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cine m-a citat · Who cited me">
+<meta name="twitter:description" content="Vezi cine te citează, fără să cauți: indicatori (h, i10), cuartile SCImago, poziția ta între colegi și exporturi Excel, Word și CSV. Gratuit, pe date OpenAlex. / See who cites you, without searching.">
+<meta name="twitter:image" content="https://SITE-URL/og-image.png">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #ffffff;
+    --ink: #242424;
+    --muted: #6b6b6b;
+    --line: #e9e9e9;
+    --chip: #f2f2f2;
+    --accent: #3f9193;
+    --accent-text: #114852;
+    --btn: #191919;
+    --btn-ink: #ffffff;
+    --err: #b3261e;
+    --serif: charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --bg: #121212;
+      --ink: #e8e8e8;
+      --muted: #9b9b9b;
+      --line: #2a2a2a;
+      --chip: #232323;
+      --accent: #6ab0b1;
+      --accent-text: #8fd0d1;
+      --btn: #f2f2f2;
+      --btn-ink: #121212;
+      --err: #ff8a80;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.5; }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+  input:not([type=checkbox]):focus,
+  input:not([type=checkbox]):focus-visible { outline: none; border-color: var(--ink); }
+
+  .top { position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .top-in { max-width: 728px; margin: 0 auto; padding: 0 20px; height: 57px; display: flex; align-items: center; justify-content: space-between; }
+  .brand-wrap { display: flex; align-items: center; gap: 10px; }
+  .edition { font-size: .72rem; font-weight: 600; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 2px 9px; }
+  .brand { font-family: var(--serif); font-weight: 700; font-size: 1.5rem; letter-spacing: -0.02em; }
+  .langs { display: flex; gap: 4px; }
+  .langs button {
+    font: inherit; font-size: .85rem; border: none; background: none; color: var(--muted);
+    padding: 6px 10px; border-radius: 99px; cursor: pointer;
+  }
+  .langs button[aria-pressed=true] { color: var(--ink); background: var(--chip); font-weight: 600; }
+
+  .wrap { max-width: 728px; margin: 0 auto; padding: 0 20px 100px; }
+  .hero { padding: 56px 0 0; }
+  h1 {
+    font-family: var(--serif); font-weight: 700; margin: 0 0 14px;
+    font-size: clamp(2.2rem, 7vw, 3.5rem); line-height: 1.1; letter-spacing: -0.03em;
+  }
+  .lede { font-family: var(--serif); font-size: 1.25rem; line-height: 1.5; color: var(--muted); margin: 0 0 30px; max-width: 34em; }
+
+  .search { display: flex; gap: 10px; flex-wrap: wrap; }
+  .search input {
+    flex: 1 1 260px; font: inherit; font-size: 1rem; padding: 12px 18px;
+    border: 1px solid var(--line); border-radius: 99px; background: var(--bg); color: var(--ink);
+  }
+  .search input:focus { border-color: var(--ink); outline: none; }
+  button.primary {
+    font: inherit; font-size: .95rem; cursor: pointer; background: var(--btn); color: var(--btn-ink);
+    border: none; border-radius: 99px; padding: 12px 24px;
+  }
+  button.primary:disabled { opacity: .5; cursor: default; }
+  button.ghost {
+    font: inherit; font-size: .9rem; cursor: pointer; background: none; color: var(--ink);
+    border: 1px solid var(--ink); border-radius: 99px; padding: 8px 18px;
+    white-space: nowrap; flex: none;
+  }
+
+  details.opts { margin-top: 14px; font-size: .88rem; color: var(--muted); }
+  details.opts summary { cursor: pointer; width: max-content; padding: 6px 0; }
+  details.opts input {
+    font: inherit; margin-top: 10px; padding: 8px 14px; width: min(340px, 100%);
+    border: 1px solid var(--line); border-radius: 99px; background: var(--bg); color: var(--ink);
+  }
+  .field { position: relative; display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  details.opts .field input { margin-top: 0; }
+  .tipbtn {
+    flex: none; width: 24px; height: 24px; padding: 0; border-radius: 50%;
+    border: 1px solid var(--muted); background: none; color: var(--muted);
+    font: 600 .8rem var(--sans); cursor: pointer;
+  }
+  .tipbtn:hover, .tipbtn[aria-expanded=true] { color: var(--ink); border-color: var(--ink); }
+  .tip {
+    display: none; position: absolute; left: 0; top: calc(100% + 8px); z-index: 6;
+    width: min(340px, 100%); padding: 10px 14px; border-radius: 8px;
+    background: var(--btn); color: var(--btn-ink); font-size: .84rem; line-height: 1.45;
+  }
+  .tipbtn:hover ~ .tip, .tipbtn:focus-visible ~ .tip, .tip.open { display: block; }
+  .opts[open] { padding-bottom: 4px; }
+
+  #status { margin: 14px 0 0; color: var(--muted); font-size: .95rem; }
+  #status:empty, .candidates:empty { display: none; }
+  #status.error { color: var(--err); }
+
+  .candidates { list-style: none; margin: 14px 0 0; padding: 0; }
+  .candidates li {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    padding: 16px 0; border-bottom: 1px solid var(--line);
+  }
+  .candidates li > div { min-width: 0; }
+  .candidates strong { font-family: var(--serif); font-size: 1.1rem; }
+  .candidates .sub { color: var(--muted); font-size: .86rem; }
+
+  .profile { margin-top: 32px; }
+  .profile h2 { font-family: var(--serif); font-size: 2rem; letter-spacing: -0.02em; margin: 0; line-height: 1.2; }
+  .profile .meta { color: var(--muted); margin: 6px 0 0; font-size: .95rem; }
+
+  .tabbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin: 28px 0 0; border-bottom: 1px solid var(--line); }
+  .tabs { display: flex; gap: 28px; }
+  .tabs [role=tab] {
+    font: inherit; font-size: .95rem; background: none; border: none; cursor: pointer; color: var(--muted);
+    padding: 0 0 14px; margin-bottom: -1px; border-bottom: 1px solid transparent;
+  }
+  .tabs [role=tab][aria-selected=true] { color: var(--ink); border-bottom-color: var(--ink); }
+
+  .dl { position: relative; flex: none; }
+  .dl-btn {
+    font: inherit; font-size: .9rem; display: flex; align-items: center; gap: 6px; cursor: pointer;
+    background: none; border: none; color: var(--muted); padding: 0 0 14px; margin-bottom: -1px;
+  }
+  .dl-btn:hover, .dl-btn[aria-expanded=true] { color: var(--ink); }
+  .dl-menu {
+    position: absolute; right: 0; top: calc(100% + 6px); z-index: 8; min-width: 260px; padding: 6px;
+    background: var(--bg); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 6px 24px rgba(0, 0, 0, .14);
+  }
+  .dl-menu button {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 16px; width: 100%; text-align: left; font: inherit; font-size: .92rem; color: var(--ink);
+    background: none; border: none; border-radius: 6px; padding: 9px 12px; cursor: pointer;
+  }
+  .dl-menu button:hover { background: var(--chip); }
+  .dl-menu button:focus-visible { background: var(--chip); outline: 2px solid var(--accent-text); outline-offset: -2px; }
+
+  .controls { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; padding: 22px 0 4px; }
+  .controls input[type=search] {
+    flex: 1 1 220px; font: inherit; font-size: .95rem; padding: 9px 16px;
+    border: 1px solid var(--line); border-radius: 99px; background: var(--chip); color: var(--ink);
+  }
+  .controls input[type=search]:focus { outline: none; border-color: var(--ink); }
+  .controls label { color: var(--muted); font-size: .9rem; display: flex; gap: 8px; align-items: center; cursor: pointer; min-height: 28px; }
+  .controls input[type=checkbox] { accent-color: var(--ink); }
+
+  .post { padding: 26px 0; border-bottom: 1px solid var(--line); }
+  .kicker { font-size: .82rem; color: var(--muted); margin-bottom: 8px; }
+  .newtag { color: var(--accent-text); font-weight: 600; margin-right: 8px; }
+  .visit { margin: 14px 0 0; font-size: .95rem; color: var(--accent-text); font-weight: 600; }
+  .visit.quiet { color: var(--muted); font-weight: 400; }
+  .note { margin: 6px 0 0; font-size: .88rem; color: var(--muted); }
+  .edition-note a { color: var(--ink); text-underline-offset: 3px; }
+  .linkbtn { font: inherit; background: none; border: none; padding: 0; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .loadall { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 12px 0 0; font-size: .9rem; color: var(--muted); }
+  .loadall progress { width: min(260px, 100%); height: 6px; accent-color: var(--accent); }
+  .tabbar { scroll-margin-top: 72px; }
+  .rangebox { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .range { color: var(--muted); font-size: .85rem; }
+  .mini { display: flex; gap: 4px; }
+  .mini button { width: 30px; height: 30px; padding: 0; border-radius: 50%; border: 1px solid var(--line); background: none; color: var(--ink); font: inherit; font-size: 1.05rem; line-height: 1; cursor: pointer; }
+  .mini button:hover:not(:disabled) { background: var(--chip); }
+  .mini button:disabled { opacity: .35; cursor: default; }
+  .pager { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 28px 0 0; }
+  .pager .pg { min-width: 36px; height: 36px; padding: 0 10px; font: inherit; font-size: .9rem; color: var(--ink); background: none; border: 1px solid transparent; border-radius: 99px; cursor: pointer; }
+  .pager .pg:hover:not(:disabled) { background: var(--chip); }
+  .pager .pg[aria-current=page] { background: var(--btn); color: var(--btn-ink); }
+  .pager .pg:disabled { color: var(--muted); opacity: .5; cursor: default; }
+  .pager .gap { color: var(--muted); padding: 0 4px; }
+  .pager .jump { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: .85rem; color: var(--muted); }
+  .pager .jump input { width: 76px; font: inherit; padding: 6px 12px; border: 1px solid var(--line); border-radius: 99px; background: var(--bg); color: var(--ink); }
+  /* Încărcare: schelet, progres, mesaj plutitor */
+  .skel { position: relative; overflow: hidden; background: var(--chip); border-radius: 6px; }
+  .skel::after { content: ''; position: absolute; inset: 0; transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .6), transparent); animation: shimmer 1.4s ease-in-out infinite; }
+  @media (prefers-color-scheme: dark) { .skel::after { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .07), transparent); } }
+  @keyframes shimmer { to { transform: translateX(100%); } }
+  @media (prefers-reduced-motion: reduce) { .skel::after { animation: none; } }
+  .profile.loading .ld-status { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 14px 0 0; font-size: .92rem; color: var(--muted); }
+  .profile.loading progress { width: min(240px, 100%); height: 6px; accent-color: var(--accent); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .skel-post { padding: 26px 0; border-bottom: 1px solid var(--line); }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 20; max-width: calc(100% - 32px);
+    background: var(--btn); color: var(--btn-ink); padding: 10px 18px; border-radius: 99px; font-size: .9rem; box-shadow: 0 6px 24px rgba(0, 0, 0, .2); }
+  .limit { margin-top: 32px; padding: 30px 0 8px; border-top: 1px solid var(--line); }
+  .oops { margin-top: 32px; padding: 28px 0 8px; border-top: 1px solid var(--line); }
+  .oops-img { display: block; width: min(460px, 100%); height: auto; border-radius: 12px; margin-bottom: 20px; }
+  .oops h2 { font-family: var(--serif); font-size: 2rem; letter-spacing: -0.02em; margin: 0; line-height: 1.2; }
+  .oops-msg { margin: 12px 0 0; max-width: 58ch; font-size: 1.05rem; line-height: 1.6; }
+  .oops-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+  .lm-cup { color: var(--muted); display: block; margin-bottom: 14px; }
+  .limit h2 { font-family: var(--serif); font-size: 2rem; letter-spacing: -0.02em; margin: 0; line-height: 1.2; }
+  .lm-sub { font-family: var(--serif); font-size: 1.3rem; color: var(--muted); margin: 6px 0 0; }
+  .lm-note { margin: 20px 0 0; max-width: 58ch; color: var(--muted); font-size: .95rem; line-height: 1.6; }
+  .limit .ghost { margin-top: 20px; }
+  .steam { animation: steam 2.6s ease-in-out infinite alternate; }
+  .steam.s2 { animation-delay: .5s; } .steam.s3 { animation-delay: 1s; }
+  @keyframes steam { from { opacity: .25; transform: translateY(1.2px); } to { opacity: 1; transform: translateY(-1px); } }
+  @media (prefers-reduced-motion: reduce) { .steam { animation: none; } }
+  .fb-btn { position: fixed; right: 20px; bottom: 20px; z-index: 15; display: flex; align-items: center; gap: 8px; padding: 11px 18px; border: none; border-radius: 99px; background: var(--btn); color: var(--btn-ink); font: inherit; font-size: .9rem; cursor: pointer; box-shadow: 0 6px 20px rgba(0, 0, 0, .22); }
+  .fb-panel { position: fixed; right: 20px; bottom: 20px; z-index: 25; width: 340px; max-height: calc(100vh - 40px); display: flex; flex-direction: column; background: var(--bg); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 12px 40px rgba(0, 0, 0, .28); overflow: hidden; }
+  .fb-head { display: flex; justify-content: space-between; align-items: center; padding: 11px 12px 11px 18px; background: var(--btn); color: var(--btn-ink); font-weight: 600; font-size: .95rem; }
+  .fb-x { background: none; border: none; color: inherit; font-size: 1.5rem; line-height: 1; cursor: pointer; padding: 0 6px; }
+  .fb-body { padding: 14px 16px 16px; overflow: auto; display: flex; flex-direction: column; gap: 10px; }
+  .fb-body textarea, .fb-body input[type=email] { width: 100%; font: inherit; font-size: .95rem; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--ink); }
+  .fb-body textarea { resize: vertical; min-height: 96px; }
+  .fb-body textarea:focus { outline: none; border-color: var(--ink); }
+  .fb-note { margin: 0; font-size: .78rem; color: var(--muted); line-height: 1.45; }
+  .fb-topic { margin: 0; font-size: .82rem; color: var(--muted); }
+  .fb-check { display: flex; gap: 8px; align-items: flex-start; font-size: .85rem; }
+  .fb-check input { margin-top: 3px; accent-color: var(--ink); }
+  .fb-status { margin: 0; font-size: .85rem; color: var(--err); }
+  .fb-status.info { color: var(--muted); }
+  .fb-status:empty { display: none; }
+  .fb-status a { color: inherit; text-underline-offset: 3px; }
+  .fb-send { align-self: flex-end; }
+  .fb-done { padding: 22px 18px 20px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .fb-ok { margin: 0; font-family: var(--serif); font-size: 1.35rem; font-weight: 700; }
+  .fb-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  :root { --q1: #FFD3D3; --q2: #FDECCE; --q3: #CEE0FD; --q4: #D0CBF7; --qink: #2b2b2b; }
+  .st-h { font-family: var(--serif); font-size: 1.3rem; letter-spacing: -0.01em; margin: 38px 0 6px; }
+  .st-h.first { margin-top: 24px; }
+  .sj-sum { color: var(--muted); font-size: .92rem; margin: 2px 0 18px; line-height: 1.5; }
+  .sj-rows { display: grid; gap: 10px; }
+  .sj-row { display: grid; grid-template-columns: 52px 1fr auto; align-items: center; gap: 12px; }
+  .sj-chip { text-align: center; font-weight: 600; font-size: .85rem; color: var(--qink); padding: 5px 0; border-radius: 8px; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1); }
+  .sj-track { position: relative; min-height: 18px; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+  .sj-bar { display: block; height: 16px; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1); }
+  .sj-n { font-size: .9rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .sj-name { font-size: .85rem; color: var(--muted); }
+  .sj-q1 { background: var(--q1); } .sj-q2 { background: var(--q2); } .sj-q3 { background: var(--q3); } .sj-q4 { background: var(--q4); }
+  .sj-none .sj-chip { background: transparent; color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); }
+  .sj-none .sj-bar { background: repeating-linear-gradient(135deg, var(--line) 0 5px, transparent 5px 10px); box-shadow: inset 0 0 0 1px var(--line); }
+  .sj-yh { margin: 26px 0 0; font-size: .88rem; color: var(--muted); }
+  .sj-years { display: flex; align-items: flex-end; gap: 8px; min-height: 150px; padding-top: 6px; }
+  .sj-ycol { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; gap: 1px; }
+  .sj-ycol .sj-seg { border-radius: 3px; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1); }
+  .sj-seg.sj-q0 { background: repeating-linear-gradient(135deg, var(--line) 0 4px, transparent 4px 8px); box-shadow: inset 0 0 0 1px var(--line); }
+  .sj-ytot { text-align: center; font-size: .72rem; color: var(--muted); margin-bottom: 3px; }
+  .sj-ylab { text-align: center; font-size: .72rem; color: var(--muted); margin-top: 5px; }
+  .sj-growth { margin: 14px 0 0; font-size: .95rem; }
+  .sj-foot { margin: 22px 0 0; font-size: .8rem; color: var(--muted); }
+  .sj-foot a { color: inherit; text-underline-offset: 3px; }
+  .sj-need { border: 1px dashed var(--line); border-radius: 12px; padding: 18px 20px; margin-top: 12px; }
+  .sj-need p { margin: 0 0 10px; line-height: 1.55; font-size: .95rem; color: var(--muted); }
+  .sj-need .sj-need-t { color: var(--ink); font-weight: 600; font-size: 1rem; }
+  .sj-need .sj-err { color: var(--err); }
+  .sj-actions { display: flex; gap: 14px 18px; flex-wrap: wrap; align-items: center; margin-top: 14px; }
+  .sj-actions a { color: var(--ink); text-underline-offset: 3px; font-size: .9rem; }
+  .tabs { flex: 1 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs [role=tab] { white-space: nowrap; flex: none; }
+  .tabs .ts { display: none; }
+  .rank { padding-top: 22px; }
+  .rk-controls { display: flex; gap: 10px 14px; flex-wrap: wrap; align-items: center; margin-bottom: 22px; }
+  .seggrp { display: inline-flex; background: var(--chip); border-radius: 99px; padding: 3px; }
+  .seg { font: inherit; font-size: .85rem; background: none; border: none; color: var(--muted); padding: 5px 13px; border-radius: 99px; cursor: pointer; }
+  .seg.on { background: var(--bg); color: var(--ink); font-weight: 600; box-shadow: 0 0 0 1px var(--line); }
+  .rk-controls select { font: inherit; font-size: .85rem; padding: 6px 10px; border: 1px solid var(--line); border-radius: 99px; background: var(--bg); color: var(--ink); max-width: 100%; }
+  .rk-act { display: flex; gap: 8px; align-items: center; font-size: .85rem; color: var(--muted); cursor: pointer; min-height: 28px; }
+  .rk-act input { accent-color: var(--ink); }
+  .rk-score { display: flex; align-items: baseline; gap: 6px 18px; flex-wrap: wrap; }
+  .rk-top { font-family: var(--serif); font-weight: 700; font-size: 2.6rem; line-height: 1.05; letter-spacing: -0.02em; }
+  .rk-sub { color: var(--muted); font-size: 1rem; }
+  .rk-who { margin: 8px 0 22px; font-size: .9rem; color: var(--muted); }
+  .rk-hist { display: flex; align-items: flex-end; gap: 10px; padding-top: 18px; }
+  .rk-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; }
+  .rk-bar { width: 100%; background: var(--chip); border-radius: 6px 6px 2px 2px; }
+  .rk-col.me .rk-bar { background: var(--accent); }
+  .rk-pct { font-size: .78rem; color: var(--muted); }
+  .rk-col.me .rk-pct { color: var(--ink); font-weight: 600; }
+  .rk-lab { font-size: .75rem; color: var(--muted); white-space: nowrap; }
+  .rk-you { position: absolute; bottom: -26px; font-size: .78rem; font-weight: 600; color: var(--accent-text); }
+  .rk-next { margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .rk-next ul { margin: 8px 0 0; padding-left: 18px; line-height: 1.7; }
+  .rk-h { margin: 0; font-weight: 600; }
+  .rk-muted { color: var(--muted); }
+  .rk-small { margin: 10px 0 0; font-size: .85rem; color: var(--muted); }
+  .snap { display: flex; gap: 10px 16px; align-items: center; flex-wrap: wrap; margin-top: 18px; padding: 12px 16px; background: var(--chip); border-radius: 10px; font-size: .92rem; }
+  .snap p { margin: 0; flex: 1 1 260px; }
+  .ind { margin: 22px 0 0; padding: 20px 0 6px; border-top: 1px solid var(--line); }
+  .ind-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px 24px; }
+  .ind-item { display: flex; flex-direction: column; gap: 2px; }
+  .ind-val { font-family: var(--serif); font-weight: 700; font-size: 1.75rem; line-height: 1.1; letter-spacing: -0.02em; }
+  .ind-lab { font-size: .9rem; }
+  .ind-sub { font-size: .8rem; color: var(--muted); }
+  .prof-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px 40px; }
+  .prof-id { min-width: 0; flex: 1 1 280px; }
+  .prof-fi { flex: none; max-width: 100%; }
+  .info { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 17px; height: 17px; margin-left: 6px; padding: 0; border: 1px solid var(--muted); border-radius: 50%; background: none; color: var(--muted); font: 600 .66rem var(--sans); cursor: help; vertical-align: 1px; }
+  .info::after { content: ''; position: absolute; inset: -8px; }
+  .info:hover, .info:focus-visible { color: var(--ink); border-color: var(--ink); }
+  .tipbox { position: fixed; z-index: 30; max-width: min(340px, calc(100vw - 24px)); padding: 10px 14px; border-radius: 10px; background: var(--btn); color: var(--btn-ink); font-size: .84rem; line-height: 1.5; box-shadow: 0 6px 24px rgba(0, 0, 0, .22); pointer-events: none; }
+  .dl-head { padding: 8px 12px 4px; font-size: .78rem; color: var(--muted); }
+  .dl-sub { font-size: .8rem; color: var(--muted); white-space: nowrap; }
+  .dl-sep { height: 1px; background: var(--line); margin: 6px 0; }
+  .ptitle { font-family: var(--serif); font-size: 1.4rem; line-height: 1.25; letter-spacing: -0.01em; margin: 0 0 6px; font-weight: 700; }
+  .ptitle a { text-decoration: none; }
+  .ptitle a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .by { font-family: var(--serif); color: var(--muted); font-size: 1rem; margin: 0; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 14px; }
+  .pills .lab { font-size: .82rem; color: var(--muted); margin-right: 2px; }
+  .pill {
+    background: var(--chip); border-radius: 99px; padding: 4px 12px; font-size: .82rem;
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .pill.self { background: none; border: 1px solid var(--line); color: var(--muted); }
+
+  .work { border-bottom: 1px solid var(--line); }
+  .work > summary {
+    list-style: none; cursor: pointer; padding: 22px 0;
+    display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: baseline;
+  }
+  .work > summary::-webkit-details-marker { display: none; }
+  .work .wtitle { font-family: var(--serif); font-size: 1.2rem; line-height: 1.3; font-weight: 700; letter-spacing: -0.01em; }
+  .work .yr { color: var(--muted); font-size: .85rem; margin-top: 4px; }
+  .work .count { font-size: .88rem; color: var(--muted); white-space: nowrap; }
+    .work .inner { padding: 0 0 8px 18px; border-left: 2px solid var(--line); margin: 0 0 18px; }
+  .work .inner .post:last-child { border-bottom: none; }
+
+  .empty { color: var(--muted); padding: 36px 0; font-family: var(--serif); font-size: 1.1rem; }
+  .more { padding: 28px 0 0; }
+  footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: .8rem; }
+  footer a { color: inherit; text-underline-offset: 3px; }
+  footer p { margin: 0 0 8px; }
+  footer details.privacy { margin: 2px 0 8px; }
+  footer details.privacy summary { cursor: pointer; width: max-content; padding: 6px 0; color: var(--ink); font-weight: 600; }
+  footer details.privacy p { margin: 2px 0 6px; max-width: 70ch; line-height: 1.6; }
+  footer strong { font-weight: 600; color: var(--ink); }
+  footer .credit { margin: 16px 0 0; }
+  footer .heart { color: var(--ink); }
+  [hidden] { display: none !important; }
+
+  /* Palete de accent */
+  :root[data-pal="teal"] { --accent: #3f9193; --accent-text: #114852; }
+  :root[data-pal="orange"] { --accent: #f58a1f; --accent-text: #b4510a; }
+  :root[data-pal="green"] { --accent: #1a8917; --accent-text: #14700f; }
+  :root[data-pal="blue"] { --accent: #2f6fdb; --accent-text: #1d4fa8; }
+  :root[data-pal="violet"] { --accent: #7a4fd6; --accent-text: #5b35ad; }
+  :root[data-pal="coral"] { --accent: #ee5d4b; --accent-text: #b83a2a; }
+  @media (prefers-color-scheme: dark) {
+    :root[data-pal="teal"] { --accent: #6ab0b1; --accent-text: #8fd0d1; }
+    :root[data-pal="orange"] { --accent: #ffa24d; --accent-text: #ffb877; }
+    :root[data-pal="green"] { --accent: #4cc24a; --accent-text: #7fd87d; }
+    :root[data-pal="blue"] { --accent: #6b9cf0; --accent-text: #9dbdf6; }
+    :root[data-pal="violet"] { --accent: #a98af0; --accent-text: #c4adf6; }
+    :root[data-pal="coral"] { --accent: #ff8a7a; --accent-text: #ffa89c; }
+  }
+  .pals { display: flex; gap: 12px; flex-wrap: wrap; }
+  .pal {
+    width: 26px; height: 26px; padding: 0; border-radius: 50%; cursor: pointer;
+    border: 2px solid var(--bg); background: var(--sa); box-shadow: 0 0 0 1px var(--line);
+  }
+  @media (prefers-color-scheme: dark) { .pal { background: var(--sd); } }
+  .pal[aria-pressed=true] { box-shadow: 0 0 0 2px var(--ink); }
+  .optrow { margin-top: 14px; }
+  .optlabel { display: block; margin-bottom: 8px; }
+  .optrow .ghost { color: var(--ink); }
+  .optrow .ghost:disabled { color: var(--muted); border-color: var(--line); cursor: default; }
+  .optnote { margin: 14px 0 0; }
+  .optnote a { color: var(--ink); text-underline-offset: 3px; }
+  .chart-wrap { padding: 28px 0 0; }
+  .chart-cap { margin: 0 0 14px; font-family: var(--serif); font-size: 1.05rem; color: var(--muted); }
+  .chart-wrap svg { width: 100%; height: auto; display: block; }
+  .chart-wrap .bar-o { fill: var(--accent); }
+  .chart-wrap .bar-s { fill: var(--accent); opacity: .35; }
+  .chart-wrap .bar-o, .chart-wrap .bar-s {
+    transform-box: fill-box; transform-origin: 50% 100%;
+    animation: grow .7s cubic-bezier(.2, .7, .2, 1) both; animation-delay: var(--d, 0ms);
+  }
+  .chart-wrap text.val { animation: fadein .4s ease both; animation-delay: calc(var(--d, 0ms) + 380ms); }
+  .chart-wrap g.col { transition: opacity .2s ease; }
+  .chart-wrap svg:hover g.col:not(:hover) { opacity: .45; }
+  @keyframes grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .chart-wrap .bar-o, .chart-wrap .bar-s, .chart-wrap text.val { animation: none; }
+    .chart-wrap g.col { transition: none; }
+  }
+  .chart-wrap .axis { stroke: var(--line); stroke-width: 1; }
+  .chart-wrap text { font: 12px var(--sans); fill: var(--muted); }
+  .chart-wrap text.val { fill: var(--ink); }
+  .legend { display: flex; gap: 18px; margin-top: 12px; font-size: .85rem; color: var(--muted); }
+  .legend .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; background: var(--accent); }
+  .legend .sw.s { opacity: .35; }
+
+  .edition { white-space: nowrap; }
+  @media (max-width: 440px) {
+    .brand { font-size: 1.2rem; }
+    .brand-wrap { gap: 6px; min-width: 0; }
+    .edition { font-size: .64rem; padding: 2px 7px; }
+  }
+  @media (max-width: 340px) { .edition { display: none; } }
+  @media (max-width: 560px) {
+    .sj-row { grid-template-columns: 44px 1fr auto; gap: 8px; }
+    .sj-years { gap: 5px; }
+    .tabs .tl { display: none; }
+    .tabs .ts { display: inline; }
+    .rk-hist { gap: 6px; }
+    .rk-lab { font-size: .68rem; }
+    .rk-top { font-size: 2.1rem; }
+    .oops { margin-top: 22px; }
+    .oops h2 { font-size: 1.6rem; }
+    .limit { margin-top: 22px; }
+    .fb-btn { right: 14px; bottom: 14px; padding: 10px 14px; }
+    .fb-panel { left: 0; right: 0; bottom: 0; width: auto; border-radius: 14px 14px 0 0; max-height: 88vh; }
+    .profile { margin-top: 22px; }
+    .prof-head { flex-direction: column; align-items: stretch; gap: 18px; }
+    .prof-id { flex: none; }
+    .ind-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .search input, .search button.primary { flex: 1 1 100%; }
+    .tabs { gap: 14px; }
+    .tabbar { gap: 8px; }
+    .dl-btn .lbl { display: none; }
+    .hero { padding-top: 36px; }
+    .lede { font-size: 1.1rem; }
+    .ptitle { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+<noscript><div style="max-width:640px;margin:48px auto;padding:0 20px;font:16px/1.6 system-ui,sans-serif">
+<h1 style="font-family:Georgia,serif">Cine m-a citat</h1>
+<p>Aplicația are nevoie de JavaScript ca să funcționeze. Activează-l în browser și reîncarcă pagina.</p>
+<p>This app needs JavaScript to work. Please enable it in your browser and reload the page.</p></div></noscript>
+
+<header class="top">
+  <div class="top-in">
+    <span class="brand-wrap"><span class="brand" data-i18n="brand"></span><span class="edition" id="edition" data-i18n="edition_badge"></span></span>
+    <nav class="langs" aria-label="Language">
+      <button data-lang="ro" aria-pressed="false">RO</button>
+      <button data-lang="en" aria-pressed="false">EN</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1 data-i18n="hero_title"></h1>
+    <p class="lede" data-i18n="hero_sub"></p>
+    <div class="search">
+      <input type="text" id="q" data-i18n-ph="ph" data-i18n-aria="ph_aria" autocomplete="off">
+      <button class="primary" id="go" data-i18n="go"></button>
+    </div>
+    <details class="opts">
+      <summary data-i18n="settings"></summary>
+      <div class="field">
+        <input type="email" id="email" data-i18n-ph="email_ph" data-i18n-aria="email_aria">
+        <button type="button" class="tipbtn" id="tipbtn" aria-describedby="emailtip" aria-expanded="false" data-i18n-aria="tip_aria">?</button>
+        <span class="tip" id="emailtip" role="tooltip" data-i18n="email_tip"></span>
+      </div>
+      <div class="optrow">
+        <span class="optlabel" data-i18n="pal_label"></span>
+        <div class="pals" id="pals"></div>
+      </div>
+      <p class="optnote" id="contact" data-i18n-html="contact"></p>
+    </details>
+    <p id="status" role="status" aria-live="polite"></p>
+    <ul class="candidates" id="candidates"></ul>
+  </section>
+
+  <div id="profile"></div>
+
+  <footer>
+    <p data-i18n-html="footer"></p>
+    <details class="privacy"><summary data-i18n="privacy_title"></summary><p data-i18n-html="privacy_body"></p></details>
+    <p class="credit"><span data-i18n="credit_made"></span> <span class="heart" aria-hidden="true">♥</span> <span data-i18n="credit_by"></span></p>
+  </footer>
+</main>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<div id="tipbox" class="tipbox" role="tooltip" hidden></div>
+
+<button type="button" id="fbbtn" class="fb-btn" hidden aria-haspopup="dialog" aria-controls="fbpanel">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>
+  <span data-i18n="fb_btn"></span>
+</button>
+<div id="fbpanel" class="fb-panel" role="dialog" aria-labelledby="fbtitle" hidden>
+  <div class="fb-head"><span id="fbtitle" data-i18n="fb_title"></span><button type="button" id="fbclose" class="fb-x" data-i18n-aria="fb_close" aria-label="Închide">×</button></div>
+  <div class="fb-body" id="fbform">
+    <p class="fb-topic" id="fbtopic" hidden></p>
+    <label class="sr" for="fbmsg" data-i18n="fb_msg_label"></label>
+    <textarea id="fbmsg" rows="5" maxlength="2000" data-i18n-ph="fb_msg_ph"></textarea>
+    <label class="sr" for="fbemail" data-i18n="fb_email_label"></label>
+    <input type="email" id="fbemail" data-i18n-ph="fb_email_ph" autocomplete="email">
+    <input type="text" id="fbhp" class="fb-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <label class="fb-check" id="fbprofwrap" hidden><input type="checkbox" id="fbprof"><span id="fbproftxt"></span></label>
+    <p class="fb-note" data-i18n="fb_ctx_note"></p>
+    <p class="fb-note" data-i18n="fb_privacy"></p>
+    <p class="fb-status" id="fbstatus" role="status"></p>
+    <button type="button" class="primary fb-send" id="fbsend" data-i18n="fb_send"></button>
+  </div>
+  <div class="fb-done" id="fbdone" hidden>
+    <p class="fb-ok" data-i18n="fb_ok_title"></p>
+    <p class="fb-note" data-i18n="fb_ok_text"></p>
+    <button type="button" class="ghost" id="fbclose2" data-i18n="fb_close"></button>
+  </div>
+</div>
+
+<script>
+// Imagine pentru ecranul de eroare (JPEG redus, încorporat ca să rămână un singur fișier).
+// Dacă vrei s-o scoți (de exemplu din motive de drepturi), pune aici un șir gol: const OOPS_IMG = '';
+const OOPS_IMG = 'data:image/jpeg;base64,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';
+</script>
+<script>
+const API = 'https://api.openalex.org';
+
+// FEEDBACK: mesajele pleacă prin Web3Forms direct în emailul cu care ți-ai făcut contul acolo.
+// Cheia de mai jos NU e secretă (e făcută să stea în pagină): permite doar trimiterea de mesaje, nu citirea lor.
+// Dacă o lași goală, fereastra „Feedback" dispare, iar linkurile „Scrie-ne" deschid emailul de rezervă (dacă îl completezi).
+const FEEDBACK_KEY = 'f3574cf4-28f9-4139-87dd-5331ec1afca2';
+// Email de rezervă: apare ca link „scrie-ne pe email" doar dacă trimiterea prin fereastra de feedback eșuează.
+// E scris în două bucăți ca să nu fie găsit ușor de roboții care caută adrese în codul paginii (nu e o protecție reală).
+// Pune '' dacă nu vrei deloc adresa în pagină.
+const FEEDBACK_EMAIL = ['dusiosulalina', 'gmail.com'].join('@');
+const HAS_CONTACT = !!(FEEDBACK_KEY || FEEDBACK_EMAIL);
+
+// Ediția „Tânăr cercetător": false = afișăm cel mult CITING_CAP citări (cele mai recente), fără „Încarcă toate".
+// Pune true ca să reactivezi încărcarea completă (cu progres și export „Toate").
+// O copie a versiunii complete e salvată în cine-m-a-citat-v2-complet.html.
+const FULL_LOAD = false;
+const CITING_CAP = 1000;
+const GLOBAL_VARS = {
+  get mail() {
+    if (FEEDBACK_KEY) return '#feedback';
+    const subject = (typeof lang !== 'undefined' && lang === 'ro') ? 'Feedback Cine m-a citat' : 'Feedback Who cited me';
+    return 'mailto:' + FEEDBACK_EMAIL + '?subject=' + encodeURIComponent(subject);
+  }
+};
+
+/* ---------- Traduceri / Translations ---------- */
+const I18N = {
+  ro: {
+    nouns: { work: ['lucrare', 'lucrări'], citation: ['citare', 'citări'], article: ['articol', 'articole'], selfcite: ['autocitare', 'autocitări'], newcitation: ['citare nouă', 'citări noi'], page: ['pagină', 'pagini'], year: ['an', 'ani'] },
+    brand: 'Cine m-a citat',
+    doc_title: 'Cine m-a citat',
+    hero_title: 'Vezi cine te citează, fără să cauți.',
+    hero_sub: 'Introdu ORCID-ul sau numele tău. Îți găsim lucrările și îți arătăm toate articolele care le citează.',
+    ph: 'ORCID (0000-0002-1825-0097) sau nume',
+    ph_aria: 'ORCID sau nume',
+    go: 'Arată citările',
+    settings: 'Setări',
+    email_ph: 'Email pentru viteză (opțional)',
+    email_aria: 'Email pentru OpenAlex',
+    tip_aria: 'Ce face acest email?',
+    email_tip: 'Nu primești notificări pe acest email. Îl trimitem doar către OpenAlex (baza de date din care luăm citările), ca să răspundă mai rapid și mai stabil. Poți lăsa câmpul gol.',
+    s_enter: 'Scrie un ORCID sau un nume.',
+    s_orcid: 'Caut profilul după ORCID…',
+    s_search: 'Caut autori…',
+    s_pick: 'Alege profilul tău:',
+    fi_short: 'FI',
+    fi_title: 'Factor de impact orientativ al revistei (OpenAlex)',
+    ind_fi: 'Factor de impact cumulat · orientativ',
+    ind_fi_sub: 'calculat pe {n} din {m} citări încărcate',
+    ind_fi_def: 'Factorul de impact orientativ al unei reviste este „2-year mean citedness" din OpenAlex: media citărilor primite în ultimii doi ani de articolele revistei, calculată pe datele OpenAlex și valabilă azi, nu în anul publicării. Cifra cumulată e suma acestor valori pentru citările încărcate din reviste.',
+    fi_note_doc: 'Nu este factorul de impact oficial (JCR) și nu este recunoscut într-un dosar.',
+    fi_open: 'Surse deschise comparabile există, dar nu sunt același lucru: SJR de la SCImago (gratuit, calculat din datele Scopus) și CiteScore.',
+    ind_info_aria: 'Despre „{name}"',
+    ind_tip_works: 'Lucrările atribuite profilului tău în OpenAlex. La nume foarte comune, profilul poate fi împărțit sau amestecat cu al altcuiva.',
+    ind_tip_cites: 'Suma citărilor primite de fiecare lucrare; un articol care citează două lucrări ale tale se numără de două ori. „Fără autocitări" scade citările venite din alte lucrări ale tale (calculate din referințele lor); cele venite doar de la coautori nu se scad. Datele vin de la OpenAlex și pot diferi de Web of Science sau Scopus.',
+    ind_tip_h: 'Cel mai mare număr h pentru care ai h lucrări cu cel puțin h citări. „Fără autocitări" îl calculează după ce scade din fiecare lucrare citările venite din alte lucrări ale tale.',
+    ind_tip_i10: 'Numărul lucrărilor tale cu cel puțin 10 citări.',
+    fb_btn: 'Feedback',
+    fb_title: 'Feedback',
+    fb_msg_label: 'Mesajul tău',
+    fb_msg_ph: 'Ce nu merge sau ce ai îmbunătăți?',
+    fb_email_label: 'Emailul tău (opțional)',
+    fb_email_ph: 'Emailul tău, dacă vrei răspuns (opțional)',
+    fb_topic_full: 'Despre: lista completă de citări',
+    fb_profile: 'Include și profilul deschis ({name})',
+    fb_ctx_note: 'Trimitem și limba, ediția și tipul de ecran, ca să putem reproduce problema.',
+    fb_privacy: 'Mesajul trece prin Web3Forms și ajunge la autorul aplicației; îl folosim doar ca să răspundem.',
+    fb_send: 'Trimite',
+    fb_sending: 'Se trimite…',
+    fb_ok_title: 'Mulțumim!',
+    fb_ok_text: 'Mesajul a ajuns. Dacă ai lăsat un email, îți răspundem acolo.',
+    fb_close: 'Închide',
+    fb_err_short: 'Scrie cel puțin câteva cuvinte.',
+    fb_err_email: 'Emailul nu pare corect.',
+    fb_err_wait: 'Așteaptă puțin înainte de un nou mesaj.',
+    fb_err_send: 'Nu am putut trimite mesajul. Încearcă din nou în câteva minute.',
+    fb_err_send_mail: 'Nu am putut trimite mesajul. Încearcă din nou sau {link}.',
+    fb_mail_link: 'scrie-ne pe email',
+    limit_title: 'Suntem la o cafea.',
+    limit_funny: 'Revenim în jur de {time}.',
+    limit_serious_today: 'Este posibil ca interogările gratuite oferite de partenerul nostru, OpenAlex, să se fi epuizat pentru azi. Se reiau în fiecare noapte, așa că reîncearcă după {time}.',
+    limit_serious_tomorrow: 'Este posibil ca interogările gratuite oferite de partenerul nostru, OpenAlex, să se fi epuizat pentru azi. Se reiau în fiecare noapte, așa că reîncearcă mâine.',
+    limit_retry: 'Reîncearcă',
+    limit_short: 'Interogările gratuite oferite de partenerul nostru, OpenAlex, s-au epuizat pentru azi. Reîncearcă mai târziu sau mâine.',
+    oops_title: 'Astea nu sunt rezultatele pe care le cauți.',
+    oops_alt: 'O figură în robă cu glugă ridică mâna într-un gest de „truc mental"',
+    oops_retry: 'Reîncearcă',
+    oops_edit: 'Modifică căutarea',
+    oops_report: 'Spune-ne ce s-a întâmplat',
+    err_code: ' (cod {n})',
+    err_msg_orcid_404: 'Nu am găsit niciun profil cu acest ORCID. Verifică cifrele sau caută după nume.',
+    err_msg_name_none: 'Nu am găsit niciun autor cu acest nume. Încearcă ORCID-ul sau altă grafie a numelui.',
+    err_msg_not_found: 'Nu am găsit ce căutam la OpenAlex. Încearcă din nou.',
+    err_msg_server: 'OpenAlex nu răspunde acum. Încearcă din nou în câteva minute.',
+    err_msg_offline: 'Nu ne putem conecta la OpenAlex. Verifică internetul și încearcă din nou.',
+    err_msg_rejected: 'OpenAlex ne-a respins cererea{code}. Probabil s-a schimbat ceva la ei. Spune-ne, ca să reparăm.',
+    err_msg_unexpected: 'Ceva n-a mers din partea noastră. Încearcă din nou, iar dacă se repetă, spune-ne.',
+    err_export: 'Nu am putut pregăti fișierul. Încearcă din nou.',
+    fb_topic_error: 'Despre: o eroare{code}',
+    privacy_title: 'Notă de confidențialitate',
+    privacy_body: 'Fără conturi, cookie-uri sau statistici. Browserul tău ține local doar ultimul profil deschis, ce ai văzut deja, limba și culoarea aleasă, plus tabelul SCImago, dacă l-ai încărcat. Ce cauți (nume sau ORCID), plus emailul din Setări dacă îl completezi, merge direct la OpenAlex, iar mesajele de feedback trec prin Web3Forms.',
+    credit_made: 'Made with',
+    credit_by: 'in CJ, ROMANIA',
+    tab_rank: 'Clasament',
+    tab_feed_s: 'Recente',
+    tab_works_s: 'Lucrări',
+    rk_m_cites: 'Citări',
+    rk_m_h: 'Indicele h',
+    rk_s_inst: 'Universitatea',
+    rk_s_country: 'Țara',
+    rk_inst_label: 'Afilierea folosită',
+    rk_active: 'Doar cercetători cu cel puțin 5 lucrări',
+    rk_title: 'Clasament',
+    rk_top: 'Top {p}%',
+    rk_place: 'locul {rank} din {total}',
+    rk_among_inst: 'Între colegii de la {name}',
+    rk_among_country: 'Între cercetătorii din {name}',
+    rk_you: 'Tu',
+    rk_hist_aria: 'Distribuția colegilor. Tu te afli în grupa {you}.',
+    rk_next: 'Ce urmează',
+    rk_step: 'Top {p}% începe la ~{v}: mai ai nevoie de ~{need}.',
+    rk_step_h: 'Top {p}% începe la indicele h ~{v}: mai ai nevoie de ~{need}.',
+    rk_years: '(≈ {y} la ritmul recent)',
+    rk_pace: 'Ritmul recent: ~{r} citări pe an (media ultimilor 3 ani încheiați). Estimarea presupune același ritm, iar colegii cresc și ei, deci e doar un reper.',
+    rk_top1: 'Ești în Top 1%.',
+    rk_few: 'Sunt prea puțini colegi în OpenAlex ({n}) pentru o comparație relevantă. Încearcă să debifezi filtrul sau să treci la nivel de țară.',
+    rk_noinst: 'OpenAlex nu are o afiliere pentru profilul tău, așa că nu avem cu cine să te comparăm.',
+    rk_err: 'Nu am putut calcula clasamentul acum. Încearcă din nou.',
+    rk_limit: 'Interogările gratuite oferite de partenerul nostru, OpenAlex, s-au epuizat pentru azi. Reîncearcă mai târziu.',
+    rk_snapshot: 'Clasamentul nu e disponibil cât timp folosim datele salvate.',
+    rk_note: 'Orientativ. Pozițiile vin din OpenAlex: afilierea e „ultima cunoscută" (cine s-a mutat apare la altă universitate), profilurile duplicate sau amestecate pot schimba cifrele, iar te compari cu toți colegii, începători și seniori. Nu arătăm niciun nume, doar poziția ta.',
+    snap_down: 'Nu putem ajunge acum la datele de la OpenAlex, așa că îți arătăm datele salvate pe {date}. Cifrele pot fi depășite.',
+    snap_limit: 'Interogările gratuite oferite de partenerul nostru, OpenAlex, s-au epuizat pentru azi, așa că îți arătăm datele salvate pe {date}. Cifrele pot fi depășite.',
+    st_h_cites: 'Citări pe ani',
+    st_h_pub: 'Unde publici',
+    sj_need_title: 'Pentru cuartile avem nevoie de tabelul SCImago.',
+    sj_need_text: 'Descarcă-l gratuit de la SCImago (pagina de clasament, anul cel mai recent, butonul „Download data") și încarcă aici fișierul CSV. Rămâne doar în browserul tău.',
+    sj_upload: 'Încarcă tabelul SCImago (CSV)',
+    sj_open: 'Deschide pagina SCImago',
+    sj_loading: 'Procesez fișierul…',
+    sj_bad: 'Fișierul nu pare să fie tabelul SCImago: lipsesc coloanele „Issn" și „SJR Best Quartile". Descarcă-l din pagina de clasament, cu butonul „Download data".',
+    sj_loaded: 'Cuartile SCImago {year} · {n} ISSN-uri ·',
+    sj_remove: 'Elimină tabelul',
+    sj_replace: 'Încarcă alt tabel',
+    sj_empty: 'Nu am găsit articole în reviste printre lucrările tale, deci nu avem ce clasifica.',
+    sj_counted: '{n} articole în reviste, din {total} lucrări.',
+    sj_ex_other: 'Am lăsat deoparte {x} lucrări (preprinturi, capitole, comunicări, alte tipuri).',
+    sj_ex_dup: 'Am scos {d} dubluri.',
+    sj_none_row: 'Fără cuartilă / negăsite',
+    sj_tip_none: 'Revistele care nu apar în tabelul SCImago (de exemplu reviste noi sau locale, sau fără ISSN în OpenAlex): {a}. Reviste din tabel, dar fără cuartilă: {b}.',
+    sj_year_h: 'Pe anul publicării',
+    sj_growth: 'Q1: {recent}% în ultimii 3 ani, față de {before}% înainte (din articolele cu cuartilă).',
+    sj_note: 'Cuartile SCImago (Scopus), ediția {year}: cea mai bună cuartilă a revistei din orice categorie. Cuartila e a revistei, nu a articolului, și se poate schimba de la un an la altul. Nu e factorul de impact și nu înlocuiește raportările oficiale. Sursa: SCImago, www.scimagojr.com.',
+    sj_xl_title: 'Articole în reviste, după cuartila SCImago {year}',
+    sj_xl_note: 'Cuartile SCImago (Scopus): cea mai bună din orice categorie; cuartila e a revistei, nu a articolului.',
+    ind_aria: 'Indicatori',
+    ind_works: 'Lucrări',
+    ind_cites: 'Citări',
+    ind_h: 'Indicele h',
+    ind_i10: 'Indicele i10',
+    ind_noself: 'fără autocitări: {n}',
+    ind_sheet: 'Indicatori',
+    ind_col_name: 'Indicator',
+    ind_col_total: 'Total',
+    ind_col_noself: 'Fără autocitări',
+    ind_source: 'Calculat din datele OpenAlex; poate diferi de Web of Science sau Scopus.',
+    edition_badge: 'Young researcher',
+    edition_note: 'Ediția pentru tineri cercetători afișează cel mult {n} de citări. Ai nevoie de lista completă? <a href="{mail}" data-fb="full">Scrie-ne</a>.',
+    edition_note_plain: 'Ediția pentru tineri cercetători afișează cel mult {n} de citări.',
+    ld_aria: 'Se încarcă profilul',
+    ld_step1: 'Pasul 1 din 2 · Aduc lucrările tale… ({n})',
+    ld_step2: 'Pasul 2 din 2 · Caut cine te citează… {found} articole găsite · {done}/{total} lucrări verificate',
+    pick_btn: 'Sunt eu',
+    no_inst: 'afiliere necunoscută',
+    tab_feed: 'Citări recente',
+    tab_works: 'Lucrările mele',
+    meta: '{works} · {articles} te citează',
+    meta_self: ' (din care {selfs})',
+    filter_ph: 'Caută după titlu sau autor',
+    hide_self: 'Ascunde autocitările',
+    empty_none: 'Încă nu am găsit citări pentru acest profil. Verifică dacă e profilul corect sau încearcă ORCID-ul.',
+    empty_filter: 'Nicio citare nu se potrivește filtrului.',
+    no_works: 'Nu am găsit lucrări.',
+    more: 'Arată încă {n}',
+    cites_label: 'Citează',
+    self_tag: 'autocitare',
+    no_title: '(fără titlu)',
+    and_others: 'și alții',
+    new_tag: 'nou',
+    new_since: '{count} de la ultima vizită ({date})',
+    none_new: 'Nicio citare nouă de la ultima vizită ({date})',
+    first_visit: 'Aceasta e prima ta vizită. De acum îți arătăm ce e nou de fiecare dată când revii.',
+    only_new: 'Doar cele noi',
+    range: '{from}–{to} din {total}',
+    prev: 'Pagina anterioară',
+    next: 'Pagina următoare',
+    pager: 'Paginare',
+    go_to: 'Mergi la pagina',
+    load_all: 'Încarcă toate',
+    loading_all: 'Încarc toate citările… {pct}% · {found} articole găsite. Lasă pagina deschisă.',
+    cancel: 'Anulează',
+    dl_loaded: 'Cele {n} încărcate',
+    dl_all: 'Toate ({total}), încărcate întâi',
+    exporting: 'Pregătesc fișierul…',
+    docx_slow: 'poate fi lent',
+    doc_cap: 'Documentul conține cele mai recente {n}. Pentru lista completă folosește Excel sau CSV.',
+    trunc_exact: 'Arăt cele mai recente {shown} din {total}.',
+    trunc_approx: 'Arăt cele mai recente {shown} din cel mult {total}.',
+    tab_chart: 'Statistici',
+    chart_cap: 'Articole care te citează, după anul publicării',
+    legend_other: 'alți autori',
+    legend_self: 'autocitări',
+    csv_btn: 'CSV',
+    xlsx_btn: 'Excel (.xlsx)',
+    docx_btn: 'Word (.docx)',
+    dl_btn: 'Descarcă',
+    pal_label: 'Culoare accent',
+    pal_names: { teal: 'Teal', orange: 'Portocaliu', green: 'Verde', blue: 'Albastru', violet: 'Violet', coral: 'Coral' },
+    sheet_name: 'Citări',
+    docx_title: 'Citări pentru {name}',
+    doc_meta: '{works} · {articles} care citează aceste lucrări',
+    doc_generated: 'Generat pe {date} cu „Cine m-a citat". Sursa datelor: OpenAlex.',
+    doc_cites: 'Citează',
+    doc_nodate: 'Fără dată',
+    csv_head: ['Data', 'Titlu', 'Autori', 'Publicație', 'FI orientativ (OpenAlex)', 'DOI / link', 'Lucrările tale citate', 'Autocitare', 'Nou'],
+    yes: 'da',
+    no: 'nu',
+    csv_name: 'citari',
+    contact: 'Ceva nu merge sau ai o idee? <a href="{mail}" data-fb="general">Scrie-ne</a>, ne ajută mult.',
+    footer: 'Citările vin de la <a href="https://openalex.org" target="_blank" rel="noopener">OpenAlex</a>, o bibliotecă științifică deschisă și gratuită pentru toți. Cifrele pot diferi puțin de Google Scholar sau Scopus.'
+  },
+  en: {
+    nouns: { work: ['paper', 'papers'], citation: ['citation', 'citations'], article: ['article', 'articles'], selfcite: ['self-citation', 'self-citations'], newcitation: ['new citation', 'new citations'], page: ['page', 'pages'], year: ['year', 'years'] },
+    brand: 'Who cited me',
+    doc_title: 'Who cited me',
+    hero_title: 'See who cites you, without searching.',
+    hero_sub: 'Enter your ORCID or your name. We find your papers and show every article that cites them.',
+    ph: 'ORCID (0000-0002-1825-0097) or name',
+    ph_aria: 'ORCID or name',
+    go: 'Show citations',
+    settings: 'Settings',
+    email_ph: 'Email for speed (optional)',
+    email_aria: 'Email for OpenAlex',
+    tip_aria: 'What does this email do?',
+    email_tip: 'You will not get notifications at this email. It is sent only to OpenAlex (the database we get citations from) so it responds faster and more reliably. You can leave it empty.',
+    s_enter: 'Enter an ORCID or a name.',
+    s_orcid: 'Looking up the profile by ORCID…',
+    s_search: 'Searching authors…',
+    s_pick: 'Choose your profile:',
+    fi_short: 'IF',
+    fi_title: 'Approximate impact factor of the journal (OpenAlex)',
+    ind_fi: 'Cumulative impact factor · approximate',
+    ind_fi_sub: 'computed on {n} of {m} loaded citations',
+    ind_fi_def: 'A journal\'s approximate impact factor is OpenAlex\'s "2-year mean citedness": the average number of citations the journal\'s articles received over the last two years, computed on OpenAlex data and valid today, not in the year of publication. The cumulative figure is the sum of these values over the loaded citations from journals.',
+    fi_note_doc: 'It is not the official impact factor (JCR) and is not recognized in a promotion file.',
+    fi_open: 'Comparable open sources exist, but they are not the same thing: SJR from SCImago (free, computed from Scopus data) and CiteScore.',
+    ind_info_aria: 'About "{name}"',
+    ind_tip_works: 'The papers attributed to your profile in OpenAlex. With very common names, a profile can be split or mixed with someone else\'s.',
+    ind_tip_cites: 'The sum of citations received by each paper; an article that cites two of your papers counts twice. "Excl. self-citations" removes citations coming from other papers of yours (computed from their references); citations coming only from co-authors are not removed. Data comes from OpenAlex and can differ from Web of Science or Scopus.',
+    ind_tip_h: 'The largest h for which you have h papers with at least h citations. "Excl. self-citations" computes it after removing, for each paper, the citations that come from your other papers.',
+    ind_tip_i10: 'The number of your papers with at least 10 citations.',
+    fb_btn: 'Feedback',
+    fb_title: 'Feedback',
+    fb_msg_label: 'Your message',
+    fb_msg_ph: 'What is not working, or what would you improve?',
+    fb_email_label: 'Your email (optional)',
+    fb_email_ph: 'Your email, if you want a reply (optional)',
+    fb_topic_full: 'About: the full citation list',
+    fb_profile: 'Also include the open profile ({name})',
+    fb_ctx_note: 'We also send your language, edition and screen type, so we can reproduce the problem.',
+    fb_privacy: 'The message goes through Web3Forms and reaches the app author; we only use it to reply.',
+    fb_send: 'Send',
+    fb_sending: 'Sending…',
+    fb_ok_title: 'Thank you!',
+    fb_ok_text: 'Your message arrived. If you left an email, we will reply there.',
+    fb_close: 'Close',
+    fb_err_short: 'Please write at least a few words.',
+    fb_err_email: 'That email does not look right.',
+    fb_err_wait: 'Please wait a moment before sending another message.',
+    fb_err_send: 'We could not send the message. Please try again in a few minutes.',
+    fb_err_send_mail: 'We could not send the message. Please try again or {link}.',
+    fb_mail_link: 'write to us by email',
+    limit_title: 'We are out for coffee.',
+    limit_funny: 'Back around {time}.',
+    limit_serious_today: 'The free queries our partner, OpenAlex, gives us may have run out for today. They come back every night, so please try again after {time}.',
+    limit_serious_tomorrow: 'The free queries our partner, OpenAlex, gives us may have run out for today. They come back every night, so please try again tomorrow.',
+    limit_retry: 'Try again',
+    limit_short: 'The free queries our partner, OpenAlex, gives us have run out for today. Please try again later or tomorrow.',
+    oops_title: 'These are not the results you are looking for.',
+    oops_alt: 'A hooded, robed figure raising a hand in a "mind trick" gesture',
+    oops_retry: 'Try again',
+    oops_edit: 'Edit your search',
+    oops_report: 'Tell us what happened',
+    err_code: ' (code {n})',
+    err_msg_orcid_404: 'We could not find a profile with this ORCID. Check the digits or search by name.',
+    err_msg_name_none: 'We could not find an author with that name. Try the ORCID or another spelling of the name.',
+    err_msg_not_found: 'We could not find what we were looking for at OpenAlex. Please try again.',
+    err_msg_server: 'OpenAlex is not responding right now. Please try again in a few minutes.',
+    err_msg_offline: 'We cannot reach OpenAlex. Check your internet connection and try again.',
+    err_msg_rejected: 'OpenAlex rejected our request{code}. Something probably changed on their side. Tell us so we can fix it.',
+    err_msg_unexpected: 'Something went wrong on our side. Please try again, and if it keeps happening, tell us.',
+    err_export: 'We could not prepare the file. Please try again.',
+    fb_topic_error: 'About: an error{code}',
+    privacy_title: 'Privacy Note',
+    privacy_body: 'No accounts, cookies or analytics. Your browser keeps locally only the last profile you opened, what you have already seen, your language and color, plus the SCImago table if you uploaded it. What you search for (name or ORCID), plus the email in Settings if you fill it in, goes straight to OpenAlex, and feedback messages go through Web3Forms.',
+    credit_made: 'Made with',
+    credit_by: 'in CJ, ROMANIA',
+    tab_rank: 'Ranking',
+    tab_feed_s: 'Recent',
+    tab_works_s: 'Papers',
+    rk_m_cites: 'Citations',
+    rk_m_h: 'h-index',
+    rk_s_inst: 'University',
+    rk_s_country: 'Country',
+    rk_inst_label: 'Affiliation used',
+    rk_active: 'Only researchers with at least 5 papers',
+    rk_title: 'Ranking',
+    rk_top: 'Top {p}%',
+    rk_place: 'place {rank} of {total}',
+    rk_among_inst: 'Among colleagues at {name}',
+    rk_among_country: 'Among researchers in {name}',
+    rk_you: 'You',
+    rk_hist_aria: 'Distribution of colleagues. You are in the {you} group.',
+    rk_next: 'What comes next',
+    rk_step: 'Top {p}% starts at ~{v}: you need ~{need} more.',
+    rk_step_h: 'Top {p}% starts at an h-index of ~{v}: you need ~{need} more.',
+    rk_years: '(≈ {y} at the recent pace)',
+    rk_pace: 'Recent pace: ~{r} citations per year (average of the last 3 completed years). The estimate assumes the same pace, and your colleagues grow too, so treat it as a reference only.',
+    rk_top1: 'You are in the Top 1%.',
+    rk_few: 'There are too few colleagues in OpenAlex ({n}) for a meaningful comparison. Try unticking the filter or switching to country level.',
+    rk_noinst: 'OpenAlex has no affiliation for your profile, so there is nobody to compare you with.',
+    rk_err: 'We could not compute the ranking right now. Please try again.',
+    rk_limit: 'The free queries our partner, OpenAlex, gives us have run out for today. Please try again later.',
+    rk_snapshot: 'The ranking is not available while we are showing saved data.',
+    rk_note: 'Approximate. Positions come from OpenAlex: the affiliation is the "last known" one (people who moved appear at another university), duplicate or mixed profiles can change the numbers, and you are compared with all colleagues, beginners and seniors alike. We never show any name, only your position.',
+    snap_down: 'We cannot reach the data from OpenAlex right now, so we are showing the data saved on {date}. The numbers may be out of date.',
+    snap_limit: 'The free queries our partner, OpenAlex, gives us have run out for today, so we are showing the data saved on {date}. The numbers may be out of date.',
+    st_h_cites: 'Citations by year',
+    st_h_pub: 'Where you publish',
+    sj_need_title: 'For quartiles we need the SCImago table.',
+    sj_need_text: 'Download it for free from SCImago (the ranking page, latest year, "Download data" button) and upload the CSV file here. It stays only in your browser.',
+    sj_upload: 'Upload the SCImago table (CSV)',
+    sj_open: 'Open the SCImago page',
+    sj_loading: 'Processing the file…',
+    sj_bad: 'This does not look like the SCImago table: the "Issn" and "SJR Best Quartile" columns are missing. Download it from the ranking page with the "Download data" button.',
+    sj_loaded: 'SCImago quartiles {year} · {n} ISSNs ·',
+    sj_remove: 'Remove the table',
+    sj_replace: 'Upload another table',
+    sj_empty: 'We found no journal articles among your works, so there is nothing to classify.',
+    sj_counted: '{n} journal articles, out of {total} works.',
+    sj_ex_other: 'We left out {x} works (preprints, chapters, conference papers, other types).',
+    sj_ex_dup: 'We removed {d} duplicates.',
+    sj_none_row: 'No quartile / not found',
+    sj_tip_none: 'Journals that are not in the SCImago table (for example new or local journals, or with no ISSN in OpenAlex): {a}. Journals in the table but without a quartile: {b}.',
+    sj_year_h: 'By year of publication',
+    sj_growth: 'Q1: {recent}% in the last 3 years, versus {before}% before (of the articles with a quartile).',
+    sj_note: 'SCImago quartiles (Scopus), {year} edition: the journal\'s best quartile in any category. The quartile belongs to the journal, not to the article, and it can change from one year to the next. It is not the impact factor and does not replace official reporting. Source: SCImago, www.scimagojr.com.',
+    sj_xl_title: 'Journal articles by SCImago quartile {year}',
+    sj_xl_note: 'SCImago (Scopus) quartiles: the best in any category; the quartile belongs to the journal, not to the article.',
+    ind_aria: 'Indicators',
+    ind_works: 'Papers',
+    ind_cites: 'Citations',
+    ind_h: 'h-index',
+    ind_i10: 'i10-index',
+    ind_noself: 'excl. self-citations: {n}',
+    ind_sheet: 'Indicators',
+    ind_col_name: 'Indicator',
+    ind_col_total: 'Total',
+    ind_col_noself: 'Excl. self-citations',
+    ind_source: 'Computed from OpenAlex data; may differ from Web of Science or Scopus.',
+    edition_badge: 'Young researcher',
+    edition_note: 'The young researcher edition shows at most {n} citations. Need the full list? <a href="{mail}" data-fb="full">Write to us</a>.',
+    edition_note_plain: 'The young researcher edition shows at most {n} citations.',
+    ld_aria: 'Loading profile',
+    ld_step1: 'Step 1 of 2 · Fetching your papers… ({n})',
+    ld_step2: 'Step 2 of 2 · Finding who cites you… {found} articles found · {done}/{total} papers checked',
+    pick_btn: 'This is me',
+    no_inst: 'unknown affiliation',
+    tab_feed: 'Recent citations',
+    tab_works: 'My papers',
+    meta: '{works} · cited by {articles}',
+    meta_self: ' (incl. {selfs})',
+    filter_ph: 'Search by title or author',
+    hide_self: 'Hide self-citations',
+    empty_none: 'No citations found for this profile yet. Check that it is the right profile or try your ORCID.',
+    empty_filter: 'No citation matches the filter.',
+    no_works: 'No papers found.',
+    more: 'Show {n} more',
+    cites_label: 'Cites',
+    self_tag: 'self-citation',
+    no_title: '(untitled)',
+    and_others: 'et al.',
+    new_tag: 'new',
+    new_since: '{count} since your last visit ({date})',
+    none_new: 'No new citations since your last visit ({date})',
+    first_visit: 'This is your first visit. From now on we will show you what is new each time you come back.',
+    only_new: 'Only new',
+    range: '{from}–{to} of {total}',
+    prev: 'Previous page',
+    next: 'Next page',
+    pager: 'Pagination',
+    go_to: 'Go to page',
+    load_all: 'Load all',
+    loading_all: 'Loading all citations… {pct}% · {found} articles found. Keep this page open.',
+    cancel: 'Cancel',
+    dl_loaded: 'The {n} loaded',
+    dl_all: 'Everything ({total}), loaded first',
+    exporting: 'Preparing the file…',
+    docx_slow: 'may be slow',
+    doc_cap: 'This document contains the most recent {n}. Use Excel or CSV for the full list.',
+    trunc_exact: 'Showing the most recent {shown} of {total}.',
+    trunc_approx: 'Showing the most recent {shown} of at most {total}.',
+    tab_chart: 'Statistics',
+    chart_cap: 'Articles that cite you, by year of publication',
+    legend_other: 'other authors',
+    legend_self: 'self-citations',
+    csv_btn: 'CSV',
+    xlsx_btn: 'Excel (.xlsx)',
+    docx_btn: 'Word (.docx)',
+    dl_btn: 'Download',
+    pal_label: 'Accent color',
+    pal_names: { teal: 'Teal', orange: 'Orange', green: 'Green', blue: 'Blue', violet: 'Violet', coral: 'Coral' },
+    sheet_name: 'Citations',
+    docx_title: 'Citations for {name}',
+    doc_meta: '{works} · {articles} citing these works',
+    doc_generated: 'Generated on {date} with "Who cited me". Data source: OpenAlex.',
+    doc_cites: 'Cites',
+    doc_nodate: 'No date',
+    csv_head: ['Date', 'Title', 'Authors', 'Venue', 'IF (approx., OpenAlex)', 'DOI / link', 'Your papers cited', 'Self-citation', 'New'],
+    yes: 'yes',
+    no: 'no',
+    csv_name: 'citations',
+    contact: 'Something not working, or got an idea? <a href="{mail}" data-fb="general">Write to us</a>, it really helps.',
+    footer: 'Citations come from <a href="https://openalex.org" target="_blank" rel="noopener">OpenAlex</a>, an open scholarly library that is free for everyone. Numbers may differ slightly from Google Scholar or Scopus.'
+  }
+};
+
+function detectLang() {
+  try { const s = localStorage.getItem('lang'); if (s && I18N[s]) return s; } catch (e) {}
+  return (navigator.language || 'en').toLowerCase().startsWith('ro') ? 'ro' : 'en';
+}
+let lang = detectLang();
+
+function t(key, vars = {}) {
+  const s = (I18N[lang][key] ?? I18N.en[key] ?? key);
+  return s.replace(/\{(\w+)\}/g, (m, k) => (vars[k] ?? GLOBAL_VARS[k] ?? ''));
+}
+function cnt(noun, n) {
+  const [one, many] = I18N[lang].nouns[noun];
+  const num = n.toLocaleString(lang);
+  if (n === 1) return `1 ${one}`;
+  const de = lang === 'ro' && (n % 100 === 0 || n % 100 >= 20) ? ' de' : '';
+  return `${num}${de} ${many}`;
+}
+
+/* ---------- Stare / State ---------- */
+const $ = (id) => document.getElementById(id);
+const PAGE_SIZE = 25;      // articole pe pagină în fluxul de citări
+const WORK_PAGE = 20;      // articole afișate odată sub o lucrare
+const PAGES_PER_ARTICLE = 385 / 5000;   // măsurat: 5.000 de articole = 385 de pagini A4 în documentul generat
+const state = { rank: null, snapshot: null, pendingId: null, errKind: null, errCode: 0, errInfo: '', limit: false, author: null, works: [], citing: [], candidates: [], page: 1, tab: 'feed', hideSelf: false, onlyNew: false, filter: '', visit: null, trunc: null, loading: null, ind: null, byWork: new Map(), workShown: {} };
+let lastStatus = null;
+
+/* ---------- Memorie pe dispozitiv / On-device memory ---------- */
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+};
+// O „vizită" ține 6 ore: dacă reîncarci pagina în acest interval, marcajele „nou" rămân.
+const SESSION_MS = 6 * 60 * 60 * 1000;
+
+function markNew(authorKey, citing) {
+  const key = 'seen:' + authorKey;
+  const now = Date.now();
+  const ids = citing.map((c) => shortId(c.id));
+  const rec = store.get(key);
+  let baseline = null;
+  let currentAt = now;
+  if (rec && rec.current) {
+    if (now - rec.current.at > SESSION_MS) baseline = rec.current;          // vizită nouă
+    else { baseline = rec.baseline || null; currentAt = rec.current.at; }    // aceeași vizită
+  }
+  const baseSet = baseline ? new Set(baseline.ids) : null;
+  let newCount = 0;
+  citing.forEach((c) => {
+    c.isNew = !!baseSet && !baseSet.has(shortId(c.id));
+    if (c.isNew) newCount++;
+  });
+  const saved = store.set(key, { baseline, current: { ids, at: currentAt } });
+  return { hasBaseline: !!baseline, baselineAt: baseline ? baseline.at : null, newCount, saved };
+}
+
+/* ---------- Palete de accent / Accent palettes ---------- */
+const PALETTES = [
+  { id: 'teal', sa: '#3f9193', sd: '#6ab0b1' },
+  { id: 'orange', sa: '#f58a1f', sd: '#ffa24d' },
+  { id: 'green', sa: '#1a8917', sd: '#4cc24a' },
+  { id: 'blue', sa: '#2f6fdb', sd: '#6b9cf0' },
+  { id: 'violet', sa: '#7a4fd6', sd: '#a98af0' },
+  { id: 'coral', sa: '#ee5d4b', sd: '#ff8a7a' }
+];
+function renderPalette() {
+  const cur = document.documentElement.dataset.pal || 'teal';
+  $('pals').innerHTML = PALETTES.map((p) => {
+    const name = esc(I18N[lang].pal_names[p.id]);
+    return `<button type="button" class="pal" data-id="${p.id}" style="--sa:${p.sa};--sd:${p.sd}" aria-pressed="${p.id === cur}" aria-label="${name}" title="${name}"></button>`;
+  }).join('');
+}
+function setPalette(id) {
+  document.documentElement.dataset.pal = id;
+  store.set('palette', id);
+  renderPalette();
+}
+
+const safeUrl = (u) => (/^\s*https?:\/\//i.test(String(u || '')) ? String(u).trim() : '');
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const shortId = (id) => id.split('/').pop();
+const parseOrcid = (text) => { const m = (text || '').match(/(\d{4}-\d{4}-\d{4}-\d{3}[\dX])/i); return m ? m[1].toUpperCase() : null; };
+
+function setStatus(key, vars = {}, isError = false) {
+  lastStatus = key ? { key, vars, isError } : null;
+  paintStatus();
+}
+function paintStatus() {
+  const el = $('status');
+  el.textContent = lastStatus ? t(lastStatus.key, lastStatus.vars) : '';
+  el.className = lastStatus && lastStatus.isError ? 'error' : '';
+}
+
+function applyStatic() {
+  document.documentElement.lang = lang;
+  document.title = t('doc_title');
+  document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-html]').forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll('[data-i18n-ph]').forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
+  document.querySelectorAll('[data-i18n-aria]').forEach((el) => { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
+  document.querySelectorAll('.langs button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+  renderPalette();
+}
+function setLang(l) {
+  lang = l;
+  try { localStorage.setItem('lang', l); } catch (e) {}
+  applyStatic();
+  paintStatus();
+  renderCandidates();
+  paintLoading();
+  if (state.limit) showLimitState();
+  if (state.errKind) renderError();
+  if (!$('fbpanel').hidden) fbRefresh();
+  if (state.author) render();
+}
+
+/* ---------- OpenAlex ---------- */
+async function api(path, params = {}) {
+  const u = new URL(API + path);
+  for (const k in params) u.searchParams.set(k, params[k]);
+  const email = $('email').value.trim();
+  if (email) u.searchParams.set('mailto', email);
+  let r;
+  try { r = await fetch(u); } catch (e) { const ne = new Error('network'); ne.network = true; throw ne; }
+  if (!r.ok) { const e = new Error('api'); e.apiCode = r.status; throw e; }
+  return r.json();
+}
+async function apiRetry(path, params, tries = 4) {
+  for (let i = 0; ; i++) {
+    try { return await api(path, params); }
+    catch (err) {
+      const retriable = err.network || err.apiCode >= 500 || (err.apiCode === 429 && i < 1);
+      if (!retriable || i >= tries - 1) throw err;
+      await new Promise((r) => setTimeout(r, err.apiCode === 429 ? 800 : 500 * 2 ** i + Math.random() * 250));
+    }
+  }
+}
+
+/* ---------- Indicatori de încărcare ---------- */
+function loadingHtml(name) {
+  const line = (w, h, extra = '') => `<div class="skel" style="width:${w};height:${h}px;${extra}"></div>`;
+  const post = () => `<div class="skel-post">${line('30%', 12)}${line('92%', 22, 'margin-top:12px')}${line('64%', 22, 'margin-top:8px')}${line('38%', 14, 'margin-top:14px')}</div>`;
+  return `<section class="profile loading" aria-busy="true">
+    <span class="sr" role="status">${esc(t('ld_aria'))}</span>
+    <h2>${esc(name || '')}</h2>
+    <div class="ld-status"><progress id="ld-bar" max="100" aria-label="${esc(t('ld_aria'))}"></progress><span id="ld-text"></span></div>
+    <div class="tabbar">${line('250px', 14, 'margin-bottom:15px')}</div>
+    ${post()}${post()}${post()}
+  </section>`;
+}
+function showLoading(a) {
+  setStatus(null);
+  state.loading = { step: 1, n: 0, found: 0, pct: 0, done: 0, total: 0 };
+  $('profile').innerHTML = loadingHtml(a.display_name);
+  paintLoading();
+}
+function ldUpdate(patch) {
+  if (!state.loading) return;
+  Object.assign(state.loading, patch);
+  paintLoading();
+}
+function paintLoading() {
+  const L = state.loading, bar = $('ld-bar'), txt = $('ld-text');
+  if (!L || !bar || !txt) return;
+  if (L.step === 1) { bar.removeAttribute('value'); txt.textContent = t('ld_step1', { n: L.n.toLocaleString(lang) }); }
+  else { bar.value = L.pct; txt.textContent = t('ld_step2', { found: L.found.toLocaleString(lang), done: L.done.toLocaleString(lang), total: L.total.toLocaleString(lang) }); }
+}
+function clearLoading() {
+  state.loading = null;
+  if (!state.author) $('profile').innerHTML = '';
+}
+function candidatesSkeleton() {
+  const row = '<li aria-hidden="true"><div style="flex:1"><div class="skel" style="width:42%;height:18px"></div><div class="skel" style="width:78%;height:12px;margin-top:9px"></div></div><div class="skel" style="width:112px;height:36px;border-radius:99px"></div></li>';
+  return row + row + row;
+}
+function showToast(key) { const el = $('toast'); el.textContent = t(key); el.hidden = false; }
+function hideToast() { $('toast').hidden = true; }
+
+function limitTime() {
+  const next = new Date(); next.setUTCHours(24, 0, 0, 0);          // limita gratuită se reface la miezul nopții UTC
+  return {
+    time: next.toLocaleTimeString(lang === 'ro' ? 'ro-RO' : 'en-GB', { hour: '2-digit', minute: '2-digit' }),
+    today: next.toDateString() === new Date().toDateString()
+  };
+}
+function limitHtml() {
+  const { time, today } = limitTime();
+  const cup = '<svg class="lm-cup" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="steam" d="M8 2.5c-.8 1 .8 1.6 0 2.8"/><path class="steam s2" d="M11.5 2.5c-.8 1 .8 1.6 0 2.8"/><path class="steam s3" d="M15 2.5c-.8 1 .8 1.6 0 2.8"/><path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5V9z"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M4 21.5h13"/></svg>';
+  return `<section class="limit" role="status">
+    ${cup}
+    <h2>${esc(t('limit_title'))}</h2>
+    <p class="lm-sub">${esc(t('limit_funny', { time }))}</p>
+    <p class="lm-note">${esc(t(today ? 'limit_serious_today' : 'limit_serious_tomorrow', { time }))}</p>
+    <button type="button" class="ghost" id="lm-retry">${esc(t('limit_retry'))}</button>
+  </section>`;
+}
+function showLimitState() {
+  state.loading = null; state.author = null; state.limit = true;
+  $('candidates').innerHTML = '';
+  setStatus(null);
+  $('profile').innerHTML = limitHtml();
+  $('lm-retry').onclick = () => { state.limit = false; start(); };
+}
+
+let toastTimer = null;
+function flashToast(key, vars) {
+  const el = $('toast');
+  el.textContent = t(key, vars || {});
+  el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(hideToast, 7000);
+}
+
+function errorKind(err, ctx) {
+  if (err.apiCode === 404) return err.orcid || ctx === 'orcid' ? 'orcid_404' : 'not_found';
+  if (err.apiCode >= 500) return 'server';
+  if (err.apiCode >= 400) return 'rejected';      // 400, 401, 403, 422… (inclusiv dacă OpenAlex schimbă regulile)
+  if (err.network) return 'offline';
+  return 'unexpected';                              // o greșeală de-a noastră, nu a rețelei
+}
+const ERR_ACTIONS = { orcid_404: ['edit'], name_none: ['edit'], not_found: ['retry'], server: ['retry'], offline: ['retry'], rejected: ['retry', 'report'], unexpected: ['retry', 'report'] };
+
+function oopsHtml(kind, code) {
+  const btn = {
+    retry: `<button type="button" class="ghost" data-act="retry">${esc(t('oops_retry'))}</button>`,
+    edit: `<button type="button" class="ghost" data-act="edit">${esc(t('oops_edit'))}</button>`,
+    report: FEEDBACK_KEY ? `<button type="button" class="ghost" data-act="report">${esc(t('oops_report'))}</button>` : ''
+  };
+  const msg = t('err_msg_' + kind, { code: code ? t('err_code', { n: code }) : '' });
+  return `<section class="oops" role="alert">
+    ${OOPS_IMG ? `<img class="oops-img" src="${OOPS_IMG}" alt="${esc(t('oops_alt'))}" width="640" height="361">` : ''}
+    <h2>${esc(t('oops_title'))}</h2>
+    <p class="oops-msg">${esc(msg)}</p>
+    <div class="oops-actions">${(ERR_ACTIONS[kind] || ['retry']).map((a) => btn[a]).join('')}</div>
+  </section>`;
+}
+function renderError() {
+  $('profile').innerHTML = oopsHtml(state.errKind, state.errCode);
+  $('profile').querySelectorAll('[data-act]').forEach((b) => b.onclick = () => {
+    if (b.dataset.act === 'retry') { state.errKind = null; start(); }
+    else if (b.dataset.act === 'edit') { $('q').focus(); $('q').select(); }
+    else if (b.dataset.act === 'report') openFeedback('error');
+  });
+}
+function showErrorState(kind, err) {
+  state.loading = null; state.author = null; state.limit = false;
+  state.errKind = kind;
+  state.errCode = err && err.apiCode ? err.apiCode : 0;
+  state.errInfo = err ? (err.apiCode ? 'HTTP ' + err.apiCode : String(err.message || '').slice(0, 160)) : '';
+  $('candidates').innerHTML = '';
+  setStatus(null);
+  renderError();
+}
+
+function errorStatus(err, ctx) {
+  err = err || {};
+  const outage = err.apiCode === 429 || err.apiCode >= 500 || err.network || (err.apiCode >= 400 && err.apiCode !== 404);
+  if (!state.author && outage) {
+    const snap = findSnapshot();
+    if (snap) {
+      try { applySnapshot(snap, err.apiCode === 429 ? 'limit' : 'down'); return; }
+      catch (e) { try { localStorage.removeItem(SNAP_KEY); } catch (e2) {} state.snapshot = null; state.author = null; }   // copie deteriorată: o aruncăm și arătăm eroarea normală
+    }
+  }
+  // Bugetul zilnic gratuit al partenerului (OpenAlex) s-a terminat: ecran dedicat (cafeaua), nu un mesaj tehnic.
+  if (err.apiCode === 429) {
+    state.loading = null;
+    if (state.author) { flashToast('limit_short'); return; }   // profilul deja afișat rămâne la locul lui
+    showLimitState(); return;
+  }
+  const kind = errorKind(err, ctx);
+  if (state.author) { flashToast('err_msg_' + kind, { code: err.apiCode ? t('err_code', { n: err.apiCode }) : '' }); return; }
+  showErrorState(kind, err);
+}
+
+async function start() {
+  state.limit = false;
+  state.errKind = null;
+  state.snapshot = null;
+  state.pendingId = null;
+  const text = $('q').value.trim();
+  state.candidates = [];
+  renderCandidates();
+  $('profile').innerHTML = '';
+  loadToken++;
+  if (fullLoad) fullLoad.cancelled = true;
+  state.author = null;
+  state.citing = [];
+  state.trunc = null;
+  state.ind = null;
+  state.byWork = new Map();
+  if (!text) { setStatus('s_enter', {}, true); return; }
+  $('go').disabled = true;
+  try {
+    const orcid = parseOrcid(text);
+    if (orcid) {
+      setStatus('s_orcid');
+      let a;
+      try { a = await api('/authors/orcid:' + orcid); } catch (e) { e.orcid = true; throw e; }   // doar 404-ul căutării ORCID înseamnă „ORCID negăsit"
+      await loadAuthor(a);
+    } else {
+      setStatus('s_search');
+      $('candidates').innerHTML = candidatesSkeleton();
+      const res = await api('/authors', { search: text, 'per-page': 8, select: 'id,display_name,orcid,works_count,cited_by_count,last_known_institutions' });
+      if (!res.results.length) { showErrorState('name_none'); }
+      else { setStatus('s_pick'); state.candidates = res.results; renderCandidates(); }
+    }
+  } catch (err) { errorStatus(err); }
+  $('go').disabled = false;
+}
+
+function renderCandidates() {
+  $('candidates').innerHTML = state.candidates.map((a, i) => {
+    const inst = (a.last_known_institutions && a.last_known_institutions[0]) ? a.last_known_institutions[0].display_name : t('no_inst');
+    const o = a.orcid ? ' · ORCID ' + esc(parseOrcid(a.orcid)) : '';
+    return `<li><div><strong>${esc(a.display_name)}</strong><div class="sub">${esc(inst)} · ${cnt('work', a.works_count)} · ${cnt('citation', a.cited_by_count)}${o}</div></div><button class="ghost" data-i="${i}">${t('pick_btn')}</button></li>`;
+  }).join('');
+}
+$('candidates').addEventListener('click', async (e) => {
+  const b = e.target.closest('button[data-i]');
+  if (!b) return;
+  const chosen = state.candidates[+b.dataset.i];
+  state.candidates = [];
+  renderCandidates();
+  $('go').disabled = true;
+  try { await loadAuthor(chosen); } catch (err) { errorStatus(err); }
+  $('go').disabled = false;
+});
+
+let loadToken = 0;
+let fullLoad = null;
+
+// Păstrăm doar ce ne trebuie din fiecare articol (zeci de mii de articole nu încap în memorie în forma brută).
+function lightRecord(c, myWorks, authorId) {
+  const names = (c.authorships || []).map((x) => x.author && x.author.display_name).filter(Boolean);
+  const rec = {
+    id: c.id,
+    display_name: c.display_name,
+    publication_date: c.publication_date,
+    doi: c.doi,
+    venue: c.primary_location && c.primary_location.source ? c.primary_location.source.display_name : '',
+    srcId: c.primary_location && c.primary_location.source ? c.primary_location.source.id : null,
+    srcType: c.primary_location && c.primary_location.source ? c.primary_location.source.type : null,
+    fi: null,
+    authors: names.slice(0, 40),
+    nAuthors: names.length,
+    isSelf: (c.authorships || []).some((x) => x.author && x.author.id === authorId),
+    isNew: false,
+    myWorks
+  };
+  rec._hay = ((rec.display_name || '') + ' ' + rec.authors.join(' ')).toLowerCase();
+  return rec;
+}
+
+const srcCache = new Map();   // id revistă -> factor de impact orientativ (sau null)
+async function enrichSources(list) {
+  const need = [...new Set(list.filter((c) => c.srcId && c.srcType === 'journal' && !srcCache.has(c.srcId)).map((c) => shortId(c.srcId)))];
+  for (let i = 0; i < need.length; i += 100) {
+    const ids = need.slice(i, i + 100);
+    try {
+      const r = await apiRetry('/sources', { filter: 'openalex:' + ids.join('|'), 'per-page': 100, select: 'id,summary_stats' });
+      const got = new Set();
+      r.results.forEach((src) => {
+        const v = src.summary_stats && src.summary_stats['2yr_mean_citedness'];
+        srcCache.set(src.id, typeof v === 'number' ? v : null);
+        got.add(shortId(src.id));
+      });
+      ids.forEach((id) => { if (!got.has(id)) srcCache.set('https://openalex.org/' + id, null); });
+    } catch (e) { break; }   // fără aceste date profilul se afișează normal, doar fără indicatorul orientativ
+  }
+  list.forEach((c) => { c.fi = c.srcId && srcCache.has(c.srcId) ? srcCache.get(c.srcId) : null; });
+}
+function fiStats() {
+  let sum = 0, n = 0;
+  state.citing.forEach((c) => { if (typeof c.fi === 'number') { sum += c.fi; n++; } });
+  return { sum, n, m: state.citing.length };
+}
+const fiFmt = (v) => v.toLocaleString(lang, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const byDateDesc = (x, y) => (y.publication_date || '').localeCompare(x.publication_date || '') || (x.id < y.id ? -1 : x.id > y.id ? 1 : 0);
+
+function indexByWork() {
+  const m = new Map();
+  state.citing.forEach((c) => c.myWorks.forEach((w) => {
+    if (!m.has(w.id)) m.set(w.id, []);
+    m.get(w.id).push(c);
+  }));
+  state.byWork = m;
+  state.workShown = {};
+}
+
+async function loadAuthor(a) {
+  const token = ++loadToken;
+  if (fullLoad) fullLoad.cancelled = true;
+  state.pendingId = a.id;
+  const aid = shortId(a.id);
+  showLoading(a);
+
+  let works = [];
+  for (let page = 1; page <= 5; page++) {
+    ldUpdate({ step: 1, n: works.length });
+    const r = await apiRetry('/works', {
+      filter: 'author.id:' + aid, sort: 'cited_by_count:desc', 'per-page': 200, page,
+      select: 'id,display_name,publication_year,cited_by_count,doi,referenced_works,type,primary_location'
+    });
+    if (token !== loadToken) return;
+    works = works.concat(r.results);
+    if (r.results.length < 200) break;
+  }
+
+  works.forEach(slimWork);
+  const ind = computeIndicators(works);
+  works.forEach((w) => { delete w.referenced_works; });
+
+  const cited = works.filter((w) => w.cited_by_count > 0);
+  const map = new Map();
+  const BATCH = 40;
+  let batches = 0, totalSum = 0, cutoff = '', batchTruncated = false;
+  for (let i = 0; i < cited.length; i += BATCH) {
+    const ids = cited.slice(i, i + BATCH).map((w) => shortId(w.id)).join('|');
+    batches++;
+    let got = 0, metaCount = 0, oldest = '';
+    for (let page = 1; page <= 5; page++) {
+      ldUpdate({ step: 2, total: cited.length });
+      const r = await apiRetry('/works', {
+        filter: 'cites:' + ids, sort: 'publication_date:desc', 'per-page': 200, page,
+        select: 'id,display_name,publication_date,doi,authorships,primary_location,referenced_works'
+      });
+      if (token !== loadToken) return;
+      metaCount = (r.meta && r.meta.count) || metaCount;
+      r.results.forEach((c) => map.set(c.id, c));
+      const pagesTotal = Math.max(1, Math.min(5, Math.ceil(metaCount / 200)));
+      const frac = (i / BATCH + page / pagesTotal) / Math.max(1, Math.ceil(cited.length / BATCH));
+      ldUpdate({ found: map.size, pct: Math.min(99, Math.round(frac * 100)), done: Math.min(cited.length, Math.round(frac * cited.length)) });
+      got += r.results.length;
+      const last = r.results[r.results.length - 1];
+      if (last && last.publication_date) oldest = last.publication_date;
+      if (r.results.length < 200) break;
+    }
+    totalSum += metaCount || got;
+    if (metaCount > got) { batchTruncated = true; if (oldest > cutoff) cutoff = oldest; }
+  }
+
+  const mine = new Map(works.map((w) => [w.id, w]));
+  let list = [...map.values()].map((c) => lightRecord(
+    c, (c.referenced_works || []).filter((id) => mine.has(id)).map((id) => mine.get(id)), a.id
+  )).sort(byDateDesc);
+
+  let truncated = false;
+  if (batchTruncated && cutoff) { list = list.filter((c) => (c.publication_date || '') >= cutoff); truncated = true; }
+  if (list.length > CITING_CAP) { list = list.slice(0, CITING_CAP); truncated = true; }
+  const total = batchTruncated ? totalSum : map.size;
+  await enrichSources(list);
+  if (token !== loadToken) return;
+
+  state.author = a;
+  state.rank = null;
+  state.works = works;
+  state.ind = ind;
+  state.trunc = truncated ? { shown: list.length, total: Math.max(total, list.length), exact: !batchTruncated || batches === 1 } : null;
+  state.visit = markNew(aid, list);
+  state.citing = list;
+  indexByWork();
+  store.set('last', { id: aid, label: a.display_name, orcid: parseOrcid(a.orcid) });
+
+  state.page = 1;
+  state.tab = 'feed';
+  state.filter = '';
+  state.onlyNew = false;
+  state.loading = null;
+  state.snapshot = null;
+  setStatus(null);
+  render();
+  saveSnapshot();
+}
+
+/* Încarcă TOATE citările, pe cursor, câte o lucrare. Returnează true dacă s-a terminat. */
+function loadAllCitations() {
+  if (!FULL_LOAD || state.snapshot) return Promise.resolve(false);
+  if (fullLoad) return fullLoad.promise;
+  if (!state.author) return Promise.resolve(false);
+  if (!state.trunc) return Promise.resolve(true);
+  const ctl = { cancelled: false, found: 0, links: 0, totalLinks: 0, promise: null };
+  fullLoad = ctl;
+  ctl.promise = runFullLoad(ctl);
+  render();
+  return ctl.promise;
+}
+
+async function runFullLoad(ctl) {
+  const token = loadToken;
+  const a = state.author;
+  const cited = state.works.filter((w) => w.cited_by_count > 0);
+  ctl.totalLinks = cited.reduce((n, w) => n + w.cited_by_count, 0);
+  const map = new Map();
+  let next = 0;
+  const worker = async () => {
+    while (!ctl.cancelled) {
+      const w = cited[next++];
+      if (!w) return;
+      let cursor = '*';
+      while (cursor && !ctl.cancelled) {
+        const r = await apiRetry('/works', {
+          filter: 'cites:' + shortId(w.id), 'per-page': 200, cursor,
+          select: 'id,display_name,publication_date,doi,authorships,primary_location'
+        });
+        if (ctl.cancelled) return;
+        r.results.forEach((c) => {
+          let rec = map.get(c.id);
+          if (!rec) { rec = lightRecord(c, [], a.id); map.set(c.id, rec); }
+          rec.myWorks.push(w);
+        });
+        ctl.links += r.results.length;
+        ctl.found = map.size;
+        cursor = r.results.length && r.meta && r.meta.next_cursor ? r.meta.next_cursor : null;
+        paintProgress(ctl);
+      }
+    }
+  };
+  let ok = false;
+  try {
+    await Promise.all([worker(), worker(), worker()]);
+    ok = !ctl.cancelled && token === loadToken;
+  } catch (err) {
+    ctl.cancelled = true;
+    if (token === loadToken) errorStatus(err);
+  }
+  fullLoad = null;
+  if (ok) {
+    const prevNew = new Set(state.citing.filter((c) => c.isNew).map((c) => c.id));
+    const list = [...map.values()].sort(byDateDesc);
+    list.forEach((c) => { c.isNew = prevNew.has(c.id); });
+    await enrichSources(list);
+    if (token !== loadToken) return false;
+    state.citing = list;
+    state.trunc = null;
+    state.page = 1;
+    indexByWork();
+  }
+  if (token === loadToken && state.author) render();
+  return ok;
+}
+
+function paintProgress(ctl) {
+  const bar = $('lp-bar'), txt = $('lp-text');
+  if (!bar || !txt) return;
+  const pct = ctl.totalLinks ? Math.min(99, Math.round((ctl.links / ctl.totalLinks) * 100)) : 0;
+  bar.value = pct;
+  txt.textContent = t('loading_all', { pct, found: ctl.found.toLocaleString(lang) });
+}
+
+/* ---------- Afișare / Rendering ---------- */
+function fmtDate(d) {
+  if (!d) return '';
+  return new Date(d + 'T00:00:00').toLocaleDateString(lang === 'ro' ? 'ro-RO' : 'en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function postHtml(c, showMine = true) {
+  const by = c.authors.slice(0, 3).join(', ') + (c.nAuthors > 3 ? ' ' + t('and_others') : '');
+  const newTag = c.isNew ? `<span class="newtag">${t('new_tag')}</span>` : '';
+  const fiTag = typeof c.fi === 'number' ? `<span class="fi" title="${esc(t('fi_title'))}">${esc(t('fi_short'))} ≈ ${fiFmt(c.fi)}</span>` : '';
+  const kicker = newTag + [c.venue ? esc(c.venue) : '', fiTag, esc(fmtDate(c.publication_date))].filter(Boolean).join(' · ');
+  const link = safeUrl(c.doi) || safeUrl(c.id);
+  let pills = '';
+  if (showMine || c.isSelf) {
+    const mineP = showMine ? `<span class="lab">${t('cites_label')}</span>` + c.myWorks.map((w) => `<span class="pill" title="${esc(w.display_name)}">${esc(w.display_name)}</span>`).join('') : '';
+    const selfP = c.isSelf ? `<span class="pill self">${t('self_tag')}</span>` : '';
+    pills = `<div class="pills">${mineP}${selfP}</div>`;
+  }
+  return `<article class="post">
+    <div class="kicker">${kicker}</div>
+    <h3 class="ptitle">${link ? `<a href="${esc(link)}" target="_blank" rel="noopener">${esc(c.display_name || t('no_title'))}</a>` : esc(c.display_name || t('no_title'))}</h3>
+    <p class="by">${esc(by)}</p>
+    ${pills}
+  </article>`;
+}
+
+function filteredCiting() {
+  const f = state.filter.trim().toLowerCase();
+  return state.citing.filter((c) => {
+    if (state.hideSelf && c.isSelf) return false;
+    if (state.onlyNew && !c.isNew) return false;
+    return !f || c._hay.includes(f);
+  });
+}
+
+function chartHtml() {
+  const years = new Map();
+  state.citing.forEach((c) => {
+    const y = parseInt((c.publication_date || '').slice(0, 4), 10);
+    if (!y) return;
+    const o = years.get(y) || { o: 0, s: 0 };
+    if (c.isSelf) o.s++; else o.o++;
+    years.set(y, o);
+  });
+  if (!years.size) return `<p class="empty">${t('empty_none')}</p>`;
+
+  const max = Math.max(...years.keys());
+  let min = Math.min(...years.keys());
+  if (max - min > 39) min = max - 39;
+  const data = [];
+  for (let y = min; y <= max; y++) {
+    const o = years.get(y) || { o: 0, s: 0 };
+    data.push({ y, o: o.o, s: o.s, t: o.o + o.s });
+  }
+  const top = Math.max(...data.map((d) => d.t), 1);
+  const W = 640, H = 250, pt = 22, pb = 28, pl = 6, pr = 6;
+  const iw = W - pl - pr, ih = H - pt - pb, yb = pt + ih;
+  const bw = iw / data.length, w = Math.min(bw * 0.72, 56);
+  const step = Math.ceil(data.length / 12);
+  const anySelf = data.some((d) => d.s);
+
+  let bars = '';
+  data.forEach((d, i) => {
+    const x = pl + i * bw + (bw - w) / 2;
+    const ho = (d.o / top) * ih, hs = (d.s / top) * ih;
+    bars += `<g class="col" style="--d:${i * 45}ms"><title>${esc(d.y + ': ' + cnt('article', d.t))}</title>`;
+    if (d.o) bars += `<rect class="bar-o" x="${x.toFixed(1)}" y="${(yb - ho).toFixed(1)}" width="${w.toFixed(1)}" height="${ho.toFixed(1)}" rx="2"/>`;
+    if (d.s) bars += `<rect class="bar-s" x="${x.toFixed(1)}" y="${(yb - ho - hs).toFixed(1)}" width="${w.toFixed(1)}" height="${hs.toFixed(1)}" rx="2"/>`;
+    if (d.t && data.length <= 24) bars += `<text class="val" x="${(x + w / 2).toFixed(1)}" y="${(yb - ho - hs - 6).toFixed(1)}" text-anchor="middle">${d.t}</text>`;
+    if ((data.length - 1 - i) % step === 0) bars += `<text x="${(x + w / 2).toFixed(1)}" y="${H - 8}" text-anchor="middle">${d.y}</text>`;
+    bars += '</g>';
+  });
+
+  return `<div class="chart-wrap">
+    <p class="chart-cap">${t('chart_cap')}</p>
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t('chart_cap'))}">
+      <line class="axis" x1="${pl}" y1="${yb}" x2="${W - pr}" y2="${yb}"/>
+      ${bars}
+    </svg>
+    ${anySelf ? `<div class="legend"><span><i class="sw"></i>${t('legend_other')}</span><span><i class="sw s"></i>${t('legend_self')}</span></div>` : ''}
+  </div>`;
+}
+
+/* ---------- Export: ZIP minimal, fără biblioteci externe ---------- */
+const CRC_TABLE = (() => {
+  const tb = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; tb[n] = c >>> 0; }
+  return tb;
+})();
+function crc32(b) { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC_TABLE[(c ^ b[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+
+async function deflateRaw(bytes) {
+  if (typeof CompressionStream === 'undefined') return null;
+  try {
+    const stream = new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate-raw'));
+    return new Uint8Array(await new Response(stream).arrayBuffer());
+  } catch (e) { return null; }
+}
+
+async function makeZip(files, mime) {
+  const enc = new TextEncoder();
+  const d = new Date();
+  const dosTime = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1);
+  const dosDate = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+  const parts = [], central = [];
+  let offset = 0;
+  for (const f of files) {
+    const name = enc.encode(f.name), data = enc.encode(f.data), crc = crc32(data);
+    let body = data, method = 0;
+    const comp = await deflateRaw(data);          // comprimat dacă browserul o permite, altfel stocat
+    if (comp && comp.length < data.length) { body = comp; method = 8; }
+    const lh = new DataView(new ArrayBuffer(30));
+    lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true); lh.setUint16(8, method, true);
+    lh.setUint16(10, dosTime, true); lh.setUint16(12, dosDate, true); lh.setUint32(14, crc, true);
+    lh.setUint32(18, body.length, true); lh.setUint32(22, data.length, true);
+    lh.setUint16(26, name.length, true); lh.setUint16(28, 0, true);
+    parts.push(new Uint8Array(lh.buffer), name, body);
+    const ch = new DataView(new ArrayBuffer(46));
+    ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true); ch.setUint16(8, 0x0800, true); ch.setUint16(10, method, true);
+    ch.setUint16(12, dosTime, true); ch.setUint16(14, dosDate, true); ch.setUint32(16, crc, true);
+    ch.setUint32(20, body.length, true); ch.setUint32(24, data.length, true); ch.setUint16(28, name.length, true);
+    ch.setUint16(30, 0, true); ch.setUint16(32, 0, true); ch.setUint16(34, 0, true); ch.setUint16(36, 0, true);
+    ch.setUint32(38, 0, true); ch.setUint32(42, offset, true);
+    central.push(new Uint8Array(ch.buffer), name);
+    offset += 30 + name.length + body.length;
+  }
+  const cdSize = central.reduce((n, p) => n + p.length, 0);
+  const end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true); end.setUint16(4, 0, true); end.setUint16(6, 0, true);
+  end.setUint16(8, files.length, true); end.setUint16(10, files.length, true);
+  end.setUint32(12, cdSize, true); end.setUint32(16, offset, true); end.setUint16(20, 0, true);
+  return new Blob([...parts, ...central, new Uint8Array(end.buffer)], { type: mime });
+}
+
+const xe = (s) => String(s ?? '')
+  .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '')
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const XML_HEAD = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n';
+const MIME_XLSX = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+const MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+function exportRows() {
+  const L = I18N[lang];
+  return [L.csv_head].concat(state.citing.map((c) => [
+    c.publication_date || '',
+    c.display_name || '',
+    c.authors.join('; ') + (c.nAuthors > c.authors.length ? '; …' : ''),
+    c.venue || '',
+    typeof c.fi === 'number' ? Math.round(c.fi * 1000) / 1000 : '',
+    safeUrl(c.doi) || safeUrl(c.id),
+    c.myWorks.map((w) => w.display_name).join(' | '),
+    c.isSelf ? L.yes : L.no,
+    c.isNew ? L.yes : L.no
+  ]));
+}
+
+function fileName(ext) {
+  const slug = (state.author.display_name || 'profil').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
+  return `${I18N[lang].csv_name}-${slug}-${new Date().toISOString().slice(0, 10)}.${ext}`;
+}
+
+function downloadBlob(blob, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+async function withBusy(fn) {
+  showToast('exporting');
+  await new Promise((r) => setTimeout(r, 60));   // lăsăm interfața să afișeze mesajul
+  try { await fn(); hideToast(); }
+  catch (e) { flashToast('err_export'); }
+}
+
+/* ----- CSV ----- */
+function exportCsv() {
+  if (!state.author || !state.citing.length) return;
+  return withBusy(async () => {
+    const sep = lang === 'ro' ? ';' : ',';   // Excel în română folosește „;" ca separator
+    const cell = (v) => {
+      let s = typeof v === 'number' && lang === 'ro' ? String(v).replace('.', ',') : String(v ?? '');
+      if (typeof v !== 'number' && /^[=+\-@\t\r]/.test(s)) s = "'" + s;      // neutralizează formulele (CSV injection)
+      return /[",;\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    };
+    const csv = '\ufeff' + exportRows().map((r) => r.map(cell).join(sep)).join('\r\n');
+    downloadBlob(new Blob([csv], { type: 'text/csv;charset=utf-8' }), fileName('csv'));
+  });
+}
+
+/* ----- Excel (.xlsx) ----- */
+async function buildXlsx(sheets) {
+  const NS = 'http://schemas.openxmlformats.org/spreadsheetml/2006/main';
+  const REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+  const col = (i) => String.fromCharCode(65 + i);
+  const sheetXml = (sh, idx) => {
+    const cols = sh.widths.map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join('');
+    const data = sh.rows.map((r, ri) => `<row r="${ri + 1}">` + r.map((v, ci) => {
+      const ref = `${col(ci)}${ri + 1}`;
+      if (typeof v === 'number') return `<c r="${ref}"><v>${v}</v></c>`;
+      return `<c r="${ref}" t="inlineStr"${ri === 0 ? ' s="1"' : ''}><is><t xml:space="preserve">${xe(String(v ?? '').slice(0, 32000))}</t></is></c>`;
+    }).join('') + '</row>').join('');
+    const pane = sh.freeze ? '<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/>' : '';
+    return `${XML_HEAD}<worksheet xmlns="${NS}"><sheetViews><sheetView workbookViewId="0"${idx === 0 ? ' tabSelected="1"' : ''}>${pane}</sheetView></sheetViews><sheetFormatPr defaultRowHeight="15"/><cols>${cols}</cols><sheetData>${data}</sheetData></worksheet>`;
+  };
+  const styles = `${XML_HEAD}<styleSheet xmlns="${NS}"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+  const n = sheets.length;
+  const overrides = sheets.map((_, i) => `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('');
+  const sheetTags = sheets.map((sh, i) => `<sheet name="${xe(sh.name)}" sheetId="${i + 1}" r:id="rId${i + 1}"/>`).join('');
+  const wbRels = sheets.map((_, i) => `<Relationship Id="rId${i + 1}" Type="${REL}/worksheet" Target="worksheets/sheet${i + 1}.xml"/>`).join('') + `<Relationship Id="rId${n + 1}" Type="${REL}/styles" Target="styles.xml"/>`;
+  return makeZip([
+    { name: '[Content_Types].xml', data: `${XML_HEAD}<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>${overrides}<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>` },
+    { name: '_rels/.rels', data: `${XML_HEAD}<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${REL}/officeDocument" Target="xl/workbook.xml"/></Relationships>` },
+    { name: 'xl/workbook.xml', data: `${XML_HEAD}<workbook xmlns="${NS}" xmlns:r="${REL}"><sheets>${sheetTags}</sheets></workbook>` },
+    { name: 'xl/_rels/workbook.xml.rels', data: `${XML_HEAD}<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${wbRels}</Relationships>` },
+    { name: 'xl/styles.xml', data: styles },
+    ...sheets.map((sh, i) => ({ name: `xl/worksheets/sheet${i + 1}.xml`, data: sheetXml(sh, i) }))
+  ], MIME_XLSX);
+}
+function indicatorRows() {
+  const I = state.ind;
+  return [
+    [t('ind_col_name'), t('ind_col_total'), t('ind_col_noself')],
+    [t('ind_works'), I.works, ''],
+    [t('ind_cites'), I.total, I.noself],
+    [t('ind_h'), I.h, I.hNo],
+    [t('ind_i10'), I.i10, I.i10No],
+    ...(fiStats().n ? [[t('ind_fi'), Math.round(fiStats().sum * 10) / 10, ''], [t('ind_fi_sub', { n: fiStats().n, m: fiStats().m })]] : []),
+    ...(() => { const P = pubStats(); return P && P.counted ? [[], [t('sj_xl_title', { year: SJR.year || '' })], ['Q1', P.c[1]], ['Q2', P.c[2]], ['Q3', P.c[3]], ['Q4', P.c[4]], [t('sj_none_row'), P.c[0]], [t('sj_xl_note')]] : []; })(),
+    [],
+    [t('ind_source')],
+    ...(fiStats().n ? [[t('fi_note_doc')], [t('fi_open')]] : [])
+  ];
+}
+function exportXlsx() {
+  if (!state.author || !state.citing.length) return;
+  return withBusy(async () => {
+    const sheets = [{ name: t('sheet_name'), rows: exportRows(), widths: [12, 60, 50, 32, 14, 40, 50, 12, 8], freeze: true }];
+    if (state.ind && state.ind.works) sheets.push({ name: t('ind_sheet'), rows: indicatorRows(), widths: [34, 14, 20] });
+    downloadBlob(await buildXlsx(sheets), fileName('xlsx'));
+  });
+}
+
+/* ----- Word (.docx) ----- */
+async function buildDocx(limit = Infinity) {
+  const W = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+  const REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+  const a = state.author;
+  const rels = [];   // hyperlinkuri externe
+  const items = state.citing.slice(0, limit);
+
+  const run = (text, o = {}) => `<w:r><w:rPr>${o.b ? '<w:b/>' : ''}${o.i ? '<w:i/>' : ''}${o.color ? `<w:color w:val="${o.color}"/>` : ''}${o.sz ? `<w:sz w:val="${o.sz}"/><w:szCs w:val="${o.sz}"/>` : ''}${o.u ? '<w:u w:val="single"/>' : ''}</w:rPr><w:t xml:space="preserve">${xe(text)}</w:t></w:r>`;
+  const para = (inner, o = {}) => `<w:p><w:pPr>${o.style ? `<w:pStyle w:val="${o.style}"/>` : ''}${o.keep ? '<w:keepNext/>' : ''}${(o.before != null || o.after != null) ? `<w:spacing${o.before != null ? ` w:before="${o.before}"` : ''}${o.after != null ? ` w:after="${o.after}"` : ''}/>` : ''}</w:pPr>${inner}</w:p>`;
+  const link = (url, inner) => { rels.push(url); return `<w:hyperlink r:id="rId${rels.length + 1}" w:history="1">${inner}</w:hyperlink>`; };
+
+  const GRAY = '6B6B6B', TEAL = '114852';
+  const date = new Date().toLocaleDateString(lang === 'ro' ? 'ro-RO' : 'en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+  let body = para(run(t('docx_title', { name: a.display_name })), { style: 'Title' });
+  body += para(run(t('doc_meta', { works: cnt('work', state.works.length), articles: articlesLabel() }), { color: GRAY }), { after: 40 });
+  if (state.trunc) body += para(run(t(state.trunc.exact ? 'trunc_exact' : 'trunc_approx', { shown: state.trunc.shown.toLocaleString(lang), total: cnt('article', state.trunc.total) }), { color: GRAY, sz: 20, i: 1 }), { after: 40 });
+  if (items.length < state.citing.length) body += para(run(t('doc_cap', { n: cnt('article', items.length) }), { color: GRAY, sz: 20, i: 1 }), { after: 40 });
+  body += para(run(t('doc_generated', { date }), { color: GRAY, sz: 20 }), { after: 200 });
+  if (state.ind && state.ind.works) {
+    const I = state.ind, n = (v) => v.toLocaleString(lang);
+    const line = (label, val, sub) => para(run(label + ': ', { b: 1 }) + run(n(val)) + (sub != null ? run('  (' + t('ind_noself', { n: n(sub) }) + ')', { color: GRAY }) : ''), { after: 40 });
+    body += para(run(t('ind_aria')), { style: 'Heading2', keep: true });
+    body += line(t('ind_works'), I.works) + line(t('ind_cites'), I.total, I.noself) + line(t('ind_h'), I.h, I.hNo) + line(t('ind_i10'), I.i10, I.i10No);
+    const F = fiStats();
+    if (F.n) {
+      body += para(run(t('ind_fi') + ': ', { b: 1 }) + run(fiFmt(F.sum)) + run('  (' + t('ind_fi_sub', { n: n(F.n), m: n(F.m) }) + ')', { color: GRAY }), { after: 40 });
+      body += para(run(t('fi_note_doc') + ' ' + t('fi_open'), { color: GRAY, sz: 20, i: 1 }), { before: 20, after: 40 });
+    }
+    body += para(run(t('ind_source'), { color: GRAY, sz: 20, i: 1 }), { before: 60, after: 200 });
+  }
+
+  const groups = new Map();
+  items.forEach((c) => {
+    const y = (c.publication_date || '').slice(0, 4);
+    if (!groups.has(y)) groups.set(y, []);
+    groups.get(y).push(c);
+  });
+
+  groups.forEach((list, y) => {
+    body += para(run((y || t('doc_nodate')) + ' · ' + cnt('article', list.length)), { style: 'Heading2', keep: true });
+    list.forEach((c) => {
+      const url = safeUrl(c.doi) || safeUrl(c.id);
+      const titleRun = run(c.display_name || t('no_title'), url ? { b: 1, color: TEAL, u: 1 } : { b: 1 });
+      let head = url ? link(url, titleRun) : titleRun;
+      if (c.isSelf) head += run(' (' + t('self_tag') + ')', { color: GRAY, sz: 20 });
+      if (c.isNew) head += run(' [' + t('new_tag') + ']', { b: 1, color: TEAL, sz: 20 });
+      body += para(head, { keep: true, before: 160, after: 20 });
+
+      const by = c.authors.slice(0, 6).join(', ') + (c.nAuthors > 6 ? ' ' + t('and_others') : '');
+      const info = [by, c.venue, typeof c.fi === 'number' ? t('fi_short') + ' ≈ ' + fiFmt(c.fi) : '', fmtDate(c.publication_date)].filter(Boolean).join(' · ');
+      if (info) body += para(run(info, { color: GRAY, sz: 20 }), { after: 20 });
+      if (c.myWorks.length) body += para(run(t('doc_cites') + ': ' + c.myWorks.map((w) => w.display_name).join('; '), { i: 1, color: GRAY, sz: 20 }), { after: 40 });
+    });
+  });
+
+  const sect = '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1417" w:right="1417" w:bottom="1417" w:left="1417" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr>';
+  const docXml = `${XML_HEAD}<w:document xmlns:w="${W}" xmlns:r="${REL}"><w:body>${body}${sect}</w:body></w:document>`;
+  const langTag = lang === 'ro' ? 'ro-RO' : 'en-GB';
+  const styles = `${XML_HEAD}<w:styles xmlns:w="${W}"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/><w:sz w:val="22"/><w:szCs w:val="22"/><w:lang w:val="${langTag}"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="80" w:line="264" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style><w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:spacing w:after="120"/></w:pPr><w:rPr><w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Georgia"/><w:b/><w:sz w:val="48"/><w:szCs w:val="48"/></w:rPr></w:style><w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:basedOn w:val="Normal"/><w:next w:val="Normal"/><w:qFormat/><w:pPr><w:keepNext/><w:spacing w:before="360" w:after="80"/><w:outlineLvl w:val="1"/></w:pPr><w:rPr><w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Georgia"/><w:b/><w:color w:val="${TEAL}"/><w:sz w:val="30"/><w:szCs w:val="30"/></w:rPr></w:style></w:styles>`;
+  const relXml = `${XML_HEAD}<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${REL}/styles" Target="styles.xml"/>${rels.map((u, i) => `<Relationship Id="rId${i + 2}" Type="${REL}/hyperlink" Target="${xe(u)}" TargetMode="External"/>`).join('')}</Relationships>`;
+  return makeZip([
+    { name: '[Content_Types].xml', data: `${XML_HEAD}<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>` },
+    { name: '_rels/.rels', data: `${XML_HEAD}<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${REL}/officeDocument" Target="word/document.xml"/></Relationships>` },
+    { name: 'word/document.xml', data: docXml },
+    { name: 'word/styles.xml', data: styles },
+    { name: 'word/_rels/document.xml.rels', data: relXml }
+  ], MIME_DOCX);
+}
+function exportDocx(arg) {
+  if (!state.author || !state.citing.length) return;
+  const n = arg === undefined || arg === 'all' ? Infinity : parseInt(arg, 10);
+  return withBusy(async () => downloadBlob(await buildDocx(n), fileName('docx')));
+}
+
+/* ---------- Meniul „Descarcă" / Download menu ---------- */
+function pagesLabel(count) {
+  const pg = Math.max(1, Math.round(count * PAGES_PER_ARTICLE));
+  return '~' + cnt('page', pg) + (pg > 1500 ? ' · ' + t('docx_slow') : '');
+}
+function dlHtml() {
+  const tr = state.trunc;
+  const ico = (d) => `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const item = (fmt, label) => `<button type="button" role="menuitem" data-fmt="${fmt}"><span>${label}</span></button>`;
+  const word = `<button type="button" role="menuitem" data-fmt="docx"><span>${esc(t('docx_btn'))}</span><span class="dl-sub">${esc(pagesLabel(state.citing.length))}</span></button>`;
+  let menu = `<div class="dl-head">${esc(t('dl_loaded', { n: state.citing.length.toLocaleString(lang) }))}</div>`;
+  menu += item('xlsx', t('xlsx_btn')) + word + item('csv', t('csv_btn'));
+  if (tr && FULL_LOAD) {
+    menu += '<div class="dl-sep"></div>';
+    menu += `<div class="dl-head">${esc(t('dl_all', { total: (tr.exact ? '' : '~') + tr.total.toLocaleString(lang) }))}</div>`;
+    menu += item('all-xlsx', t('xlsx_btn')) + item('all-csv', t('csv_btn'));
+  }
+  return `<div class="dl">
+    <button type="button" class="dl-btn" id="dlbtn" aria-haspopup="menu" aria-expanded="false" aria-controls="dlmenu" aria-label="${esc(t('dl_btn'))}">
+      ${ico('<path d="M12 4v11"/><path d="M7 11l5 5 5-5"/><path d="M5 20h14"/>')}<span class="lbl">${t('dl_btn')}</span>${ico('<path d="M6 9l6 6 6-6"/>')}
+    </button>
+    <div class="dl-menu" id="dlmenu" role="menu" hidden>${menu}</div>
+  </div>`;
+}
+function setDl(open, focusFirst) {
+  const menu = $('dlmenu'), btn = $('dlbtn');
+  if (!menu || !btn) return;
+  menu.hidden = !open;
+  btn.setAttribute('aria-expanded', String(open));
+  if (open && focusFirst) { const first = menu.querySelector('button'); if (first) first.focus(); }
+}
+const DL_ACTIONS = {
+  xlsx: () => exportXlsx(),
+  docx: (arg) => exportDocx(arg),
+  csv: () => exportCsv(),
+  'all-xlsx': async () => { if (await loadAllCitations()) await exportXlsx(); },
+  'all-csv': async () => { if (await loadAllCitations()) await exportCsv(); }
+};
+document.addEventListener('click', (e) => {
+  const item = e.target.closest && e.target.closest('#dlmenu [data-fmt]');
+  if (item) { setDl(false); const [fmt, arg] = item.dataset.fmt.split(':'); DL_ACTIONS[fmt](arg); return; }
+  if (e.target.closest && e.target.closest('#dlbtn')) {
+    const open = $('dlmenu').hidden;
+    setDl(open, open && e.detail === 0);   // la tastatură (Enter/Space) mută focusul pe primul element
+    return;
+  }
+  setDl(false);
+});
+document.addEventListener('keydown', (e) => {
+  const menu = $('dlmenu');
+  if (!menu || menu.hidden) return;
+  const items = [...menu.querySelectorAll('button')];
+  const i = items.indexOf(document.activeElement);
+  if (e.key === 'Escape') { setDl(false); $('dlbtn').focus(); }
+  else if (e.key === 'ArrowDown') { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+  else if (e.key === 'Tab') { setDl(false); }
+});
+
+/* ---------- Indicatori / Indicators ---------- */
+// Autocitare = citare dintr-o altă lucrare a aceluiași autor. O calculăm exact din referințele
+// propriilor lucrări (nu depinde de câte citări am încărcat în listă).
+function hIndex(counts) {
+  const a = counts.slice().sort((x, y) => y - x);
+  let h = 0;
+  while (h < a.length && a[h] >= h + 1) h++;
+  return h;
+}
+function computeIndicators(works) {
+  const ids = new Set(works.map((w) => w.id));
+  const self = new Map();
+  works.forEach((a) => (a.referenced_works || []).forEach((r) => {
+    if (r !== a.id && ids.has(r)) self.set(r, (self.get(r) || 0) + 1);
+  }));
+  const total = [], clean = [];
+  works.forEach((w) => {
+    const c = w.cited_by_count || 0;
+    const sc = Math.min(self.get(w.id) || 0, c);
+    w.selfCites = sc;
+    total.push(c); clean.push(c - sc);
+  });
+  const sum = (arr) => arr.reduce((n, v) => n + v, 0);
+  return {
+    works: works.length,
+    total: sum(total), noself: sum(clean),
+    h: hIndex(total), hNo: hIndex(clean),
+    i10: total.filter((v) => v >= 10).length, i10No: clean.filter((v) => v >= 10).length
+  };
+}
+function infoBtn(label, tip) {
+  return `<button type="button" class="info" data-tip="${esc(tip)}" aria-describedby="tipbox" aria-label="${esc(t('ind_info_aria', { name: label }))}">?</button>`;
+}
+function indicatorsHtml() {
+  const I = state.ind;
+  if (!I || !I.works) return '';
+  const n = (v) => v.toLocaleString(lang);
+  const item = (val, label, tip, sub) => `<div class="ind-item"><span class="ind-val">${n(val)}</span><span class="ind-lab">${esc(label)}${infoBtn(label, tip)}</span>${sub != null ? `<span class="ind-sub">${esc(t('ind_noself', { n: n(sub) }))}</span>` : ''}</div>`;
+  return `<section class="ind" aria-label="${esc(t('ind_aria'))}">
+    <div class="ind-grid">${item(I.works, t('ind_works'), t('ind_tip_works'))}${item(I.total, t('ind_cites'), t('ind_tip_cites'), I.noself)}${item(I.h, t('ind_h'), t('ind_tip_h'), I.hNo)}${item(I.i10, t('ind_i10'), t('ind_tip_i10'), I.i10No)}</div>
+  </section>`;
+}
+// Factorul de impact cumulat orientativ: sus, în dreapta, pe rândul cu numele autorului.
+function fiBlockHtml() {
+  const fi = fiStats();
+  if (!fi.n) return '';
+  const n = (v) => v.toLocaleString(lang);
+  return `<div class="prof-fi ind-fi"><div class="ind-item"><span class="ind-val">${fiFmt(fi.sum)}</span><span class="ind-lab">${esc(t('ind_fi'))}${infoBtn(t('ind_fi'), t('ind_fi_def') + ' ' + t('fi_note_doc') + ' ' + t('fi_open'))}</span><span class="ind-sub">${esc(t('ind_fi_sub', { n: n(fi.n), m: n(fi.m) }))}</span></div></div>`;
+}
+
+/* ---------- Tooltip comun pentru butoanele „?" ---------- */
+let pinnedTip = null;
+function showTip(btn) {
+  const box = $('tipbox');
+  box.textContent = btn.dataset.tip || '';
+  box.hidden = false;
+  const r = btn.getBoundingClientRect(), b = box.getBoundingClientRect(), vw = window.innerWidth, vh = window.innerHeight;
+  const left = Math.min(Math.max(12, r.left + r.width / 2 - b.width / 2), Math.max(12, vw - b.width - 12));
+  let top = r.bottom + 8;
+  if (top + b.height > vh - 12 && r.top - b.height - 8 > 12) top = r.top - b.height - 8;   // dacă nu încape dedesubt, îl punem deasupra
+  box.style.left = left + 'px';
+  box.style.top = top + 'px';
+}
+function hideTip() { pinnedTip = null; const box = $('tipbox'); if (box) box.hidden = true; }
+const tipBtn = (e) => (e.target && e.target.closest ? e.target.closest('.info') : null);
+document.addEventListener('mouseover', (e) => { const b = tipBtn(e); if (b && !pinnedTip) showTip(b); });
+document.addEventListener('mouseout', (e) => { const b = tipBtn(e); if (b && !pinnedTip) $('tipbox').hidden = true; });
+document.addEventListener('focusin', (e) => { const b = tipBtn(e); if (b) showTip(b); });
+document.addEventListener('focusout', (e) => { const b = tipBtn(e); if (b && !pinnedTip) $('tipbox').hidden = true; });
+document.addEventListener('click', (e) => {
+  const b = tipBtn(e);
+  if (b) { if (pinnedTip === b) hideTip(); else { pinnedTip = b; showTip(b); } return; }
+  if (pinnedTip) hideTip();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideTip(); });
+window.addEventListener('scroll', () => { if ($('tipbox') && !$('tipbox').hidden) hideTip(); }, { passive: true });
+window.addEventListener('resize', hideTip);
+
+
+function articlesLabel() {
+  const tr = state.trunc;
+  return tr ? (tr.exact ? '' : '~') + cnt('article', tr.total) : cnt('article', state.citing.length);
+}
+
+function truncHtml() {
+  const tr = state.trunc;
+  if (!tr) return '';
+  const key = tr.exact ? 'trunc_exact' : 'trunc_approx';
+  const text = esc(t(key, { shown: tr.shown.toLocaleString(lang), total: cnt('article', tr.total) }));
+  const btn = fullLoad || !FULL_LOAD ? '' : ` <button type="button" class="linkbtn" id="loadall">${t('load_all')}</button>`;
+  const edition = FULL_LOAD ? '' : `<br><span class="edition-note">${t(HAS_CONTACT ? 'edition_note' : 'edition_note_plain', { n: CITING_CAP.toLocaleString(lang) })}</span>`;
+  return `<p class="note">${text}${btn}${edition}</p>`;
+}
+
+function loadAllHtml() {
+  if (!fullLoad) return '';
+  return `<div class="loadall"><progress id="lp-bar" max="100" value="0" aria-label="${esc(t('loading_all', { pct: 0, found: 0 }))}"></progress><span id="lp-text" role="status"></span><button type="button" class="ghost" id="lp-cancel">${t('cancel')}</button></div>`;
+}
+
+function pagerHtml(page, pages) {
+  if (pages <= 1) return '';
+  const set = new Set([1, pages]);
+  for (let i = page - 2; i <= page + 2; i++) if (i >= 1 && i <= pages) set.add(i);
+  const nums = [...set].sort((x, y) => x - y);
+  let out = `<button type="button" class="pg" data-page="${page - 1}" ${page === 1 ? 'disabled' : ''} aria-label="${esc(t('prev'))}">‹</button>`;
+  let prev = 0;
+  nums.forEach((n) => {
+    if (n - prev > 1) out += '<span class="gap">…</span>';
+    out += `<button type="button" class="pg" data-page="${n}" ${n === page ? 'aria-current="page"' : ''}>${n}</button>`;
+    prev = n;
+  });
+  out += `<button type="button" class="pg" data-page="${page + 1}" ${page === pages ? 'disabled' : ''} aria-label="${esc(t('next'))}">›</button>`;
+  const jump = pages > 12 ? `<label class="jump">${t('go_to')} <input type="number" id="jump" min="1" max="${pages}" value="${page}"></label>` : '';
+  return `<nav class="pager" aria-label="${esc(t('pager'))}">${out}${jump}</nav>`;
+}
+
+function miniPagerHtml(page, pages) {
+  return `<span class="mini"><button type="button" data-page="${page - 1}" ${page === 1 ? 'disabled' : ''} aria-label="${esc(t('prev'))}">‹</button><button type="button" data-page="${page + 1}" ${page === pages ? 'disabled' : ''} aria-label="${esc(t('next'))}">›</button></span>`;
+}
+
+function fillWork(d) {
+  const id = d.dataset.w, inner = d.querySelector('.inner');
+  const list = state.byWork.get(id) || [];
+  if (!list.length) { inner.hidden = true; return; }
+  const n = state.workShown[id] || WORK_PAGE;
+  const left = list.length - n;
+  inner.innerHTML = list.slice(0, n).map((c) => postHtml(c, false)).join('')
+    + (left > 0 ? `<div class="more"><button type="button" class="ghost" data-more>${t('more', { n: Math.min(WORK_PAGE, left) })}</button></div>` : '');
+  inner.hidden = false;
+  const mb = inner.querySelector('[data-more]');
+  if (mb) mb.onclick = () => { state.workShown[id] = n + WORK_PAGE; fillWork(d); };
+}
+
+function scrollToTabs() {
+  const el = $('profile').querySelector && $('profile').querySelector('.tabbar');
+  if (el && el.scrollIntoView) el.scrollIntoView({ block: 'start' });
+}
+let filterTimer = null;
+
+function visitHtml() {
+  const v = state.visit;
+  if (!v) return '';
+  if (v.hasBaseline) {
+    const date = new Date(v.baselineAt).toLocaleDateString(lang === 'ro' ? 'ro-RO' : 'en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
+    return v.newCount
+      ? `<p class="visit">${esc(t('new_since', { count: cnt('newcitation', v.newCount), date }))}</p>`
+      : `<p class="visit quiet">${esc(t('none_new', { date }))}</p>`;
+  }
+  return v.saved ? `<p class="visit quiet">${esc(t('first_visit'))}</p>` : '';
+}
+
+function render() {
+  hideTip();
+  const a = state.author;
+  const total = state.citing.length;
+  const self = state.citing.filter((c) => c.isSelf).length;
+  const inst = (a.last_known_institutions && a.last_known_institutions[0]) ? a.last_known_institutions[0].display_name : '';
+  // Cu panoul de indicatori, linia de sub nume rămâne doar cu instituția (altfel cifrele s-ar bate cap în cap).
+  const hasInd = !!(state.ind && state.ind.works);
+  const meta = hasInd ? esc(inst) : t('meta', { works: cnt('work', state.works.length), articles: articlesLabel() })
+    + (self ? t('meta_self', { selfs: cnt('selfcite', self) }) : '')
+    + (inst ? ' · ' + esc(inst) : '');
+
+  let html = `<section class="profile">
+    <div class="prof-head">
+      <div class="prof-id">
+        <h2>${esc(a.display_name)}</h2>
+        ${meta ? `<p class="meta">${meta}</p>` : ''}
+      </div>
+      ${fiBlockHtml()}
+    </div>
+    ${snapBannerHtml()}
+    ${indicatorsHtml()}
+    ${visitHtml()}
+    ${truncHtml()}
+    ${loadAllHtml()}
+    <div class="tabbar">
+    <div class="tabs" role="tablist">
+      <button role="tab" data-tab="feed" aria-selected="${state.tab === 'feed'}"><span class="tl">${t('tab_feed')}</span><span class="ts">${t('tab_feed_s')}</span></button>
+      <button role="tab" data-tab="works" aria-selected="${state.tab === 'works'}"><span class="tl">${t('tab_works')}</span><span class="ts">${t('tab_works_s')}</span></button>
+      <button role="tab" data-tab="chart" aria-selected="${state.tab === 'chart'}">${t('tab_chart')}</button>
+      <button role="tab" data-tab="rank" aria-selected="${state.tab === 'rank'}">${t('tab_rank')}</button>
+    </div>
+    ${total ? dlHtml() : ''}
+    </div>`;
+
+  if (state.tab === 'feed') {
+    const list = filteredCiting();
+    const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+    state.page = Math.min(Math.max(1, state.page), pages);
+    const from = (state.page - 1) * PAGE_SIZE;
+    html += `<div class="controls">
+      <input type="search" id="f" placeholder="${esc(t('filter_ph'))}" aria-label="${esc(t('filter_ph'))}" value="${esc(state.filter)}">
+      <label><input type="checkbox" id="hs" ${state.hideSelf ? 'checked' : ''}> ${t('hide_self')}</label>
+      ${state.visit && state.visit.newCount ? `<label><input type="checkbox" id="on" ${state.onlyNew ? 'checked' : ''}> ${t('only_new')}</label>` : ''}
+      ${list.length ? `<span class="rangebox"><span class="range">${esc(t('range', { from: (from + 1).toLocaleString(lang), to: Math.min(list.length, from + PAGE_SIZE).toLocaleString(lang), total: list.length.toLocaleString(lang) }))}</span>${pages > 1 ? miniPagerHtml(state.page, pages) : ''}</span>` : ''}
+    </div>`;
+    if (!list.length) {
+      html += `<p class="empty">${total ? t('empty_filter') : t('empty_none')}</p>`;
+    } else {
+      html += list.slice(from, from + PAGE_SIZE).map((c) => postHtml(c)).join('');
+      html += pagerHtml(state.page, pages);
+    }
+  } else if (state.tab === 'chart') {
+    html += `<h3 class="st-h first">${esc(t('st_h_cites'))}</h3>` + chartHtml() + pubHtml();
+  } else if (state.tab === 'rank') {
+    html += state.snapshot ? `<p class="empty">${esc(t('rk_snapshot'))}</p>` : '<div id="rank-box" class="rank"></div>';
+  } else {
+    html += state.works.map((w) => `<details class="work" data-w="${esc(w.id)}">
+        <summary>
+          <div><div class="wtitle">${esc(w.display_name)}</div><div class="yr">${esc(w.publication_year)}</div></div>
+          <span class="count">${cnt('citation', w.cited_by_count)}</span>
+        </summary>
+        <div class="inner" hidden></div>
+      </details>`).join('') || `<p class="empty">${t('no_works')}</p>`;
+  }
+  html += '</section>';
+  $('profile').innerHTML = html;
+  bindStats();
+  if (state.tab === 'rank' && !state.snapshot) { if (!state.rank) state.rank = rankInit(); if (state.rank.status === 'idle') loadRank(); else renderRank(); }
+
+  const tabsEl = $('profile').querySelector('.tabs'), actTab = tabsEl && tabsEl.querySelector('[aria-selected=true]');
+  if (tabsEl && actTab && actTab.offsetLeft + actTab.offsetWidth > tabsEl.clientWidth) tabsEl.scrollLeft = actTab.offsetLeft + actTab.offsetWidth - tabsEl.clientWidth;
+  $('profile').querySelectorAll('.tabs [role=tab]').forEach((b) => b.onclick = () => { state.tab = b.dataset.tab; render(); });
+  $('profile').querySelectorAll('details.work').forEach((d) => d.addEventListener('toggle', () => { if (d.open) fillWork(d); }));
+  $('profile').querySelectorAll('[data-page]').forEach((b) => b.onclick = () => { state.page = +b.dataset.page; render(); scrollToTabs(); });
+  const jump = $('jump');
+  if (jump) jump.onkeydown = (e) => {
+    if (e.key !== 'Enter') return;
+    const n = parseInt(jump.value, 10);
+    if (n >= 1) { state.page = n; render(); scrollToTabs(); }
+  };
+  const f = $('f');
+  if (f) {
+    f.oninput = () => {
+      state.filter = f.value; state.page = 1;
+      clearTimeout(filterTimer);
+      filterTimer = setTimeout(() => {
+        const pos = f.selectionStart; render();
+        const nf = $('f'); nf.focus(); nf.setSelectionRange(pos, pos);
+      }, 180);
+    };
+    $('hs').onchange = (e) => { state.hideSelf = e.target.checked; state.page = 1; render(); };
+    const on = $('on');
+    if (on) on.onchange = (e) => { state.onlyNew = e.target.checked; state.page = 1; render(); };
+  }
+  const la = $('loadall');
+  if (la) la.onclick = () => loadAllCitations();
+  const sr = $('snap-retry'); if (sr) sr.onclick = () => start();
+  const cancel = $('lp-cancel');
+  if (cancel) cancel.onclick = () => { if (fullLoad) fullLoad.cancelled = true; };
+  if (fullLoad) paintProgress(fullLoad);
+}
+
+/* ---------- Unde publici: cuartile SCImago (Scopus) ---------- */
+const SJR_URL = 'sjr-2025.json';          // tabel opțional, pus lângă index.html (vezi explicația din răspuns)
+const SJR_STORE = 'sjr1';
+const PUB_TYPES = new Set(['article', 'review']);
+const normIssn = (x) => String(x || '').replace(/[^0-9xX]/g, '').toUpperCase();
+const normTitle = (x) => String(x || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+let SJR = null, sjrBusy = false, sjrErr = '';
+
+function slimWork(w) {            // păstrăm doar ce trebuie din fiecare lucrare: tipul, tipul sursei, ISSN-urile, titlul normalizat
+  const src = w.primary_location && w.primary_location.source;
+  w.jt = w.type || '';
+  w.sty = src ? (src.type || '') : '';
+  w.is = src ? [...new Set([...(src.issn || []), src.issn_l].filter(Boolean).map(normIssn).filter((x) => /^[0-9]{7}[0-9X]$/.test(x)))] : [];
+  w.tn = normTitle(w.display_name);
+  delete w.type; delete w.primary_location;
+}
+
+function sjrFromPacked(o, source) {
+  const map = new Map();
+  Object.keys(o.q).forEach((k) => { const str = o.q[k]; for (let i = 0; i + 8 <= str.length; i += 8) map.set(str.slice(i, i + 8), +k); });
+  return { map, year: o.year, n: map.size, source };
+}
+function packSjr(map, year) {
+  const g = { 0: [], 1: [], 2: [], 3: [], 4: [] };
+  map.forEach((q, k) => g[q].push(k));
+  const q = {}; Object.keys(g).forEach((k) => { q[k] = g[k].sort().join(''); });
+  return { v: 1, year, n: map.size, q };
+}
+function parseSjrCsv(text) {       // CSV-ul SCImago: separat cu „;", ghilimele pentru câmpuri, ISSN-uri fără cratimă
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+  const n = text.length; let i = 0;
+  const record = () => {
+    const f = []; let cur = '', q = false;
+    while (i < n) {
+      const c = text[i];
+      if (q) { if (c === '"') { if (text[i + 1] === '"') { cur += '"'; i += 2; continue; } q = false; i++; continue; } cur += c; i++; continue; }
+      if (c === '"') { q = true; i++; continue; }
+      if (c === ';') { f.push(cur); cur = ''; i++; continue; }
+      if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; i++; f.push(cur); return f; }
+      cur += c; i++;
+    }
+    f.push(cur); return f;
+  };
+  const head = record().map((h) => h.trim().toLowerCase());
+  const iI = head.indexOf('issn'), iQ = head.indexOf('sjr best quartile');
+  const yh = head.map((h) => (h.match(/^total docs\.\s*\((\d{4})\)/) || [])[1]).find(Boolean);
+  if (iI < 0 || iQ < 0) throw new Error('bad');
+  const map = new Map();
+  while (i < n) {
+    const r = record();
+    if (r.length <= Math.max(iI, iQ)) continue;
+    const qm = /^Q([1-4])$/.exec(r[iQ].trim()), q = qm ? +qm[1] : 0;
+    r[iI].split(/[,\s]+/).forEach((p) => {
+      const k = normIssn(p);
+      if (!/^[0-9]{7}[0-9X]$/.test(k)) return;
+      const old = map.get(k);
+      if (old === undefined || (old === 0 && q > 0) || (q > 0 && q < old)) map.set(k, q);
+    });
+  }
+  if (map.size < 100) throw new Error('bad');
+  return { map, year: yh ? +yh : null };
+}
+function loadSjrFromStore() {
+  const o = store.get(SJR_STORE);
+  if (o && o.v === 1 && o.q) SJR = sjrFromPacked(o, 'upload');
+}
+async function loadSjrHosted() {
+  if (SJR || location.protocol === 'file:') return;
+  try {
+    const r = await fetch(SJR_URL);
+    if (!r.ok) return;
+    const o = await r.json();
+    if (!(o && o.v === 1 && o.q) || SJR) return;
+    SJR = sjrFromPacked(o, 'site');
+    if (state.author && state.tab === 'chart') render();
+  } catch (e) { /* fără tabel pus de noi: rămâne încărcarea de către utilizator */ }
+}
+async function onSjrFile(file) {
+  sjrBusy = true; sjrErr = ''; render();
+  await new Promise((r) => setTimeout(r, 30));
+  try {
+    const parsed = parseSjrCsv(await file.text());
+    SJR = { map: parsed.map, year: parsed.year, n: parsed.map.size, source: 'upload' };
+    store.set(SJR_STORE, { ...packSjr(parsed.map, parsed.year), at: Date.now() });
+  } catch (e) { sjrErr = 'sj_bad'; }
+  sjrBusy = false; render();
+}
+function removeSjr() {
+  try { localStorage.removeItem(SJR_STORE); } catch (e) {}
+  SJR = null; loadSjrHosted(); render();
+}
+
+function pubStats() {
+  if (!SJR) return null;
+  const c = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0 }, years = new Map(), seen = new Set();
+  let other = 0, dup = 0, absent = 0, noq = 0, counted = 0;
+  state.works.forEach((w) => {
+    if (!(PUB_TYPES.has(w.jt) && w.sty === 'journal')) { other++; return; }
+    if (w.tn && seen.has(w.tn)) { dup++; return; }
+    if (w.tn) seen.add(w.tn);
+    let q = 0, found = false;
+    (w.is || []).forEach((k) => { const v = SJR.map.get(k); if (v === undefined) return; found = true; if (v > 0 && (q === 0 || v < q)) q = v; });
+    c[q]++; counted++;
+    if (!q) { if (found) noq++; else absent++; }
+    if (w.publication_year) { const y = years.get(w.publication_year) || { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0 }; y[q]++; years.set(w.publication_year, y); }
+  });
+  return { c, years, other, dup, absent, noq, counted };
+}
+function pubGrowth(P) {      // ponderea Q1 în ultimii 3 ani față de înainte, din articolele cu cuartilă
+  const y0 = new Date().getFullYear() - 2, a = { q1: 0, n: 0 }, b = { q1: 0, n: 0 };
+  P.years.forEach((v, y) => { const t3 = v[1] + v[2] + v[3] + v[4], o = y >= y0 ? a : b; o.q1 += v[1]; o.n += t3; });
+  if (a.n < 3 || b.n < 3) return null;
+  return { recent: Math.round(a.q1 / a.n * 100), before: Math.round(b.q1 / b.n * 100) };
+}
+function pubHtml() {
+  const tipNote = SJR ? t('sj_note', { year: SJR.year || '' }) : t('sj_note', { year: '' });
+  const head = `<h3 class="st-h">${esc(t('st_h_pub'))}${infoBtn(t('st_h_pub'), tipNote)}</h3>`;
+  const fileInput = '<input type="file" id="sj-file" accept=".csv,text/csv,.txt" hidden>';
+  const need = () => `<div class="sj-need"><p class="sj-need-t">${esc(t('sj_need_title'))}</p><p>${esc(t('sj_need_text'))}</p>
+      ${sjrErr ? `<p class="sj-err">${esc(t(sjrErr))}</p>` : ''}
+      <div class="sj-actions"><button type="button" class="ghost" id="sj-up">${esc(t('sj_upload'))}</button><a href="https://www.scimagojr.com/journalrank.php" target="_blank" rel="noopener">${esc(t('sj_open'))}</a></div></div>`;
+  if (sjrBusy) return head + `<p class="sj-sum" role="status">${esc(t('sj_loading'))}</p>`;
+  if (!SJR) return head + need() + fileInput;
+  const P = pubStats(), n = (v) => v.toLocaleString(lang);
+  const foot = `<p class="sj-foot">${esc(t('sj_loaded', { year: SJR.year || '?', n: n(SJR.n) }))} <a href="https://www.scimagojr.com" target="_blank" rel="noopener">SCImago</a>${SJR.source === 'upload' ? ` · <button type="button" class="linkbtn" id="sj-rm">${esc(t('sj_remove'))}</button>` : ''} · <button type="button" class="linkbtn" id="sj-up">${esc(t('sj_replace'))}</button></p>${fileInput}`;
+  if (!P.counted) return head + `<p class="empty">${esc(t('sj_empty'))}</p>` + foot;
+  const max = Math.max(...[1, 2, 3, 4, 0].map((q) => P.c[q]), 1);
+  const rows = [1, 2, 3, 4, 0].map((q) => {
+    const cnt = P.c[q], pct = Math.round(cnt / P.counted * 100), w = Math.max(cnt ? 2 : 0, Math.round(cnt / max * 100));
+    const label = q ? 'Q' + q : '—';
+    const name = q ? '' : `<span class="sj-name">${esc(t('sj_none_row'))}${infoBtn(t('sj_none_row'), t('sj_tip_none', { a: P.absent, b: P.noq }))}</span>`;
+    return `<div class="sj-row${q ? '' : ' sj-none'}" data-q="${q}" data-count="${cnt}"><span class="sj-chip sj-q${q}">${label}</span><div class="sj-track">${q ? '' : name}<span class="sj-bar sj-q${q}" style="width:${w}%"></span></div><span class="sj-n"><b>${n(cnt)}</b> · ${pct}%</span></div>`;
+  }).join('');
+  const ys = [...P.years.keys()].sort((a, b) => a - b), last = ys[ys.length - 1], first = Math.max(ys[0], last - 9);
+  const cols = []; for (let y = first; y <= last; y++) cols.push([y, P.years.get(y) || { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0 }]);
+  const maxT = Math.max(...cols.map(([, v]) => v[0] + v[1] + v[2] + v[3] + v[4]), 1);
+  const stack = cols.map(([y, v]) => {
+    const tot = v[0] + v[1] + v[2] + v[3] + v[4];
+    const segs = [4, 3, 2, 1, 0].map((q) => v[q] ? `<div class="sj-seg sj-q${q}" style="height:${Math.max(3, Math.round(v[q] / maxT * 110))}px" title="${q ? 'Q' + q : esc(t('sj_none_row'))}: ${v[q]}"></div>` : '').join('');
+    return `<div class="sj-ycol" data-year="${y}" data-total="${tot}"><span class="sj-ytot">${tot || ''}</span>${segs}<span class="sj-ylab">${y}</span></div>`;
+  }).join('');
+  const g = pubGrowth(P);
+  const excluded = [P.other ? t('sj_ex_other', { x: P.other }) : '', P.dup ? t('sj_ex_dup', { d: P.dup }) : ''].filter(Boolean).join(' ');
+  return head + `<p class="sj-sum">${esc(t('sj_counted', { n: n(P.counted), total: n(state.works.length) }))} ${esc(excluded)}</p>
+    <div class="sj-rows">${rows}</div>
+    <p class="sj-yh">${esc(t('sj_year_h'))}</p>
+    <div class="sj-years" role="img" aria-label="${esc(t('sj_year_h'))}">${stack}</div>
+    ${g ? `<p class="sj-growth">${esc(t('sj_growth', g))}</p>` : ''}
+    ${foot}`;
+}
+function bindStats() {
+  const up = $('sj-up'), fi = $('sj-file');
+  if (up && fi) { up.onclick = () => fi.click(); fi.onchange = () => { if (fi.files && fi.files[0]) onSjrFile(fi.files[0]); }; }
+  const rm = $('sj-rm'); if (rm) rm.onclick = removeSjr;
+}
+
+/* ---------- Varianta de avarie: copia salvată a ultimului profil ---------- */
+const SNAP_KEY = 'snap1';
+function saveSnapshot() {
+  const a = state.author;
+  if (!a || state.snapshot) return;
+  const inst = a.last_known_institutions && a.last_known_institutions[0];
+  store.set(SNAP_KEY, {
+    savedAt: Date.now(),
+    author: { id: a.id, display_name: a.display_name, orcid: a.orcid || null, inst: inst ? { id: inst.id, display_name: inst.display_name, country_code: inst.country_code } : null },
+    works: state.works.map((w) => ({ id: w.id, display_name: w.display_name, publication_year: w.publication_year, cited_by_count: w.cited_by_count, doi: w.doi, jt: w.jt, sty: w.sty, is: w.is, tn: w.tn })),
+    ind: state.ind, trunc: state.trunc, fullCount: state.citing.length,
+    citing: state.citing.slice(0, 500).map((c) => ({ id: c.id, display_name: c.display_name, publication_date: c.publication_date, doi: c.doi, venue: c.venue, srcId: c.srcId, srcType: c.srcType, fi: c.fi, authors: c.authors, nAuthors: c.nAuthors, isSelf: c.isSelf, my: c.myWorks.map((w) => w.id) }))
+  });                                     // dacă memoria browserului e plină, store.set doar eșuează discret
+}
+const normName = (x) => String(x || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+function snapshotValid(sn) {
+  return !!(sn && sn.author && typeof sn.author.id === 'string' && typeof sn.author.display_name === 'string' && Array.isArray(sn.works) && Array.isArray(sn.citing));
+}
+function findSnapshot() {
+  const snap = store.get(SNAP_KEY);
+  if (!snapshotValid(snap)) return null;
+  if (state.pendingId && snap.author.id === state.pendingId) return snap;     // profilul ales din listă
+  const text = $('q').value.trim(), orc = parseOrcid(text);
+  if (orc) return snap.author.orcid && parseOrcid(snap.author.orcid) === orc ? snap : null;
+  return text && normName(text) === normName(snap.author.display_name) ? snap : null;   // nu arătăm profilul altcuiva
+}
+function applySnapshot(snap, reason) {
+  const works = snap.works.map((w) => ({ ...w })), byId = new Map(works.map((w) => [w.id, w]));
+  state.citing = snap.citing.map((c) => {
+    const r = { ...c, isNew: false, myWorks: (c.my || []).map((id) => byId.get(id)).filter(Boolean) };
+    delete r.my; r._hay = ((r.display_name || '') + ' ' + (r.authors || []).join(' ')).toLowerCase();
+    return r;
+  });
+  state.loading = null; state.limit = false; state.errKind = null; state.rank = null;
+  state.author = { id: snap.author.id, display_name: snap.author.display_name, orcid: snap.author.orcid, last_known_institutions: snap.author.inst ? [snap.author.inst] : [] };
+  // nota „Arăt cele mai recente N din M" trebuie să descrie ce vedem de fapt (copia ține cel mult 500 de citări)
+  const total = snap.trunc ? snap.trunc.total : (snap.fullCount || state.citing.length), shown = state.citing.length;
+  state.works = works; state.ind = snap.ind; state.visit = null;
+  state.trunc = shown < total ? { shown, total, exact: snap.trunc ? snap.trunc.exact : true } : null;
+  state.snapshot = { savedAt: snap.savedAt, reason };
+  indexByWork();
+  state.page = 1; state.tab = 'feed'; state.filter = ''; state.onlyNew = false;
+  $('candidates').innerHTML = ''; setStatus(null);
+  render();
+}
+function snapBannerHtml() {
+  const S = state.snapshot;
+  if (!S) return '';
+  const date = new Date(S.savedAt).toLocaleDateString(lang === 'ro' ? 'ro-RO' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  return `<div class="snap" role="status"><p>${esc(t(S.reason === 'limit' ? 'snap_limit' : 'snap_down', { date }))}</p><button type="button" class="ghost" id="snap-retry">${esc(t('oops_retry'))}</button></div>`;
+}
+
+/* ---------- Clasament între colegi (doar poziția ta, fără nume) ---------- */
+const RANK_BINS = { cites: [9, 49, 199, 999, 4999], h: [2, 5, 9, 19, 39] };
+const RANK_PCTS = [50, 25, 10, 5, 1];
+const RANK_TTL = 7 * 24 * 60 * 60 * 1000;   // distribuția unei universități se schimbă încet: o păstrăm o săptămână
+const RANK_MIN = 30;                         // sub acest număr de colegi comparația nu are sens
+let rankToken = 0;
+
+function rankInit() { return { metric: 'cites', scope: 'inst', active: true, instIdx: 0, author: null, data: null, status: 'idle', err: null }; }
+const rankField = (m) => (m === 'h' ? 'summary_stats.h_index' : 'cited_by_count');
+const rankMine = (au, m) => (m === 'h' ? (au.summary_stats && au.summary_stats.h_index) : au.cited_by_count);
+
+function rankScope(R) {
+  const insts = ((R.author && R.author.last_known_institutions) || []).filter((i) => i && i.id);
+  if (!insts.length) return null;
+  const inst = insts[Math.min(R.instIdx, insts.length - 1)];
+  if (R.scope === 'country' && inst.country_code) return { kind: 'country', code: inst.country_code, inst, insts };
+  return { kind: 'inst', id: shortId(inst.id), inst, insts };
+}
+function rankBase(scope, active) {
+  const p = [scope.kind === 'inst' ? 'last_known_institutions.id:' + scope.id : 'last_known_institutions.country_code:' + scope.code];
+  if (active) p.push('works_count:>4');             // „cercetători activi": cel puțin 5 lucrări
+  return p;
+}
+async function rankCount(parts) {
+  const r = await apiRetry('/authors', { filter: parts.join(','), 'per-page': 1, select: 'id' });   // cerem doar totalul, nu lista
+  if (!r || !r.meta || typeof r.meta.count !== 'number') throw new Error('no count');
+  return r.meta.count;
+}
+async function rankCompute(R, scope) {
+  const fld = rankField(R.metric), base = rankBase(scope, R.active);
+  const key = ['rk1', scope.kind === 'inst' ? scope.id : scope.code, R.metric, R.active ? 'a' : 'all'].join(':');
+  let dist = store.get(key);
+  if (!dist || !dist.at || Date.now() - dist.at > RANK_TTL) {
+    const total = await rankCount(base);
+    dist = { at: Date.now(), total, gt: [], thr: {} };
+    if (total >= RANK_MIN) {
+      dist.gt = await Promise.all(RANK_BINS[R.metric].map((T) => rankCount([...base, fld + ':>' + T])));
+      const got = await Promise.all(RANK_PCTS.map(async (pct) => {
+        const k = Math.max(1, Math.ceil(total * pct / 100));
+        if (k > 10000) return [pct, null];           // limita de paginare simplă a OpenAlex
+        const r = await apiRetry('/authors', { filter: base.join(','), sort: fld + ':desc', 'per-page': 1, page: k, select: R.metric === 'h' ? 'summary_stats' : 'cited_by_count' });
+        const a = r.results && r.results[0];
+        return [pct, a ? (R.metric === 'h' ? (a.summary_stats && a.summary_stats.h_index) : a.cited_by_count) : null];
+      }));
+      got.forEach(([pct, v]) => { if (typeof v === 'number') dist.thr[pct] = v; });
+    }
+    store.set(key, dist);
+  }
+  const mine = rankMine(R.author, R.metric);
+  if (typeof mine !== 'number') throw new Error('no value');
+  const above = dist.total >= RANK_MIN ? await rankCount([...base, fld + ':>' + mine]) : 0;
+  return { ...dist, mine, above, scope };
+}
+
+async function loadRank() {
+  if (state.snapshot) return;
+  const R = state.rank, token = ++rankToken;
+  R.status = 'loading'; renderRank();
+  try {
+    if (!R.author) R.author = await api('/authors/' + shortId(state.author.id), { select: 'id,cited_by_count,works_count,summary_stats,last_known_institutions,counts_by_year' });
+    if (token !== rankToken) return;
+    const scope = rankScope(R);
+    if (!scope) { R.status = 'noinst'; renderRank(); return; }
+    R.data = await rankCompute(R, scope);
+    if (token !== rankToken) return;
+    R.status = R.data.total < RANK_MIN ? 'few' : 'ok';
+  } catch (e) { if (token !== rankToken) return; R.status = 'error'; R.err = e; }
+  renderRank();
+}
+
+function rankBinLabels(metric) {
+  const T = RANK_BINS[metric], n = (v) => v.toLocaleString(lang);
+  return [`0–${n(T[0])}`, ...T.slice(1).map((t, i) => `${n(T[i] + 1)}–${n(t)}`), `${n(T[T.length - 1] + 1)}+`];
+}
+function recentPace(au) {            // citările primite pe an, media ultimilor 3 ani încheiați (OpenAlex ține ~10 ani)
+  const y = new Date().getFullYear(), rows = ((au && au.counts_by_year) || []).filter((r) => r.year >= y - 3 && r.year <= y - 1);
+  if (!rows.length) return 0;
+  return Math.round(rows.reduce((n, r) => n + (r.cited_by_count || 0), 0) / rows.length);
+}
+function rankHtml() {
+  const R = state.rank, n = (v) => v.toLocaleString(lang);
+  const seg = (attr, val, cur, label) => `<button type="button" class="seg${val === cur ? ' on' : ''}" data-${attr}="${val}" aria-pressed="${val === cur}">${esc(label)}</button>`;
+  const scope = R.author ? rankScope(R) : null;
+  let controls = `<div class="rk-controls">
+    <span class="seggrp">${seg('rkm', 'cites', R.metric, t('rk_m_cites'))}${seg('rkm', 'h', R.metric, t('rk_m_h'))}</span>
+    ${scope && scope.inst.country_code ? `<span class="seggrp">${seg('rks', 'inst', R.scope, t('rk_s_inst'))}${seg('rks', 'country', R.scope, t('rk_s_country'))}</span>` : ''}
+    ${scope && scope.insts.length > 1 ? `<select id="rk-inst" aria-label="${esc(t('rk_inst_label'))}">${scope.insts.map((i, k) => `<option value="${k}"${k === R.instIdx ? ' selected' : ''}>${esc(i.display_name)}</option>`).join('')}</select>` : ''}
+    <label class="rk-act"><input type="checkbox" id="rk-active" ${R.active ? 'checked' : ''}> ${esc(t('rk_active'))}</label>
+  </div>`;
+  let body = '';
+  const line = (w, h, st = '') => `<div class="skel" style="width:${w};height:${h}px;${st}"></div>`;
+  if (R.status === 'loading' || R.status === 'idle') body = `<div class="rk-skel">${line('45%', 40)}${line('70%', 14, 'margin-top:10px')}${line('100%', 120, 'margin-top:22px')}</div>`;
+  else if (R.status === 'noinst') body = `<p class="empty">${esc(t('rk_noinst'))}</p>`;
+  else if (R.status === 'few') body = `<p class="empty">${esc(t('rk_few', { n: R.data.total }))}</p>`;
+  else if (R.status === 'error') {
+    const lim = R.err && R.err.apiCode === 429;
+    body = `<p class="empty">${esc(t(lim ? 'rk_limit' : 'rk_err'))}</p><button type="button" class="ghost" id="rk-retry">${esc(t('oops_retry'))}</button>`;
+  } else {
+    const d = R.data, rank = d.above + 1, top = Math.max(1, Math.ceil(rank / d.total * 100)), T = RANK_BINS[R.metric];
+    const gt = d.gt, counts = [d.total - gt[0], ...gt.slice(0, -1).map((g, i) => g - gt[i + 1]), gt[gt.length - 1]];
+    const mineBin = T.filter((x) => d.mine > x).length, maxC = Math.max(...counts, 1), labs = rankBinLabels(R.metric);
+    const sc = d.scope, place = sc.kind === 'inst' ? sc.inst.display_name : regionName(sc.code);
+    const who = t(sc.kind === 'inst' ? 'rk_among_inst' : 'rk_among_country', { name: place });
+    const bars = counts.map((c, i) => {
+      const pct = c / d.total * 100, h = Math.max(3, Math.round(c / maxC * 96));
+      return `<div class="rk-col${i === mineBin ? ' me' : ''}" data-count="${c}"><span class="rk-pct">${pct < 1 && c > 0 ? '<1' : Math.round(pct)}%</span><div class="rk-bar" style="height:${h}px"></div><span class="rk-lab">${esc(labs[i])}</span>${i === mineBin ? `<span class="rk-you">${esc(t('rk_you'))}</span>` : ''}</div>`;
+    }).join('');
+    const pace = R.metric === 'cites' ? recentPace(R.author) : 0;
+    const next = RANK_PCTS.filter((p) => typeof d.thr[p] === 'number' && d.thr[p] > d.mine).slice(0, 2);
+    const nextHtml = next.length ? `<div class="rk-next"><p class="rk-h">${esc(t('rk_next'))}</p><ul>${next.map((p) => {
+      const need = d.thr[p] - d.mine, yrs = pace > 0 ? Math.max(1, Math.ceil(need / pace)) : 0;
+      const fmt = (x) => (R.metric === 'h' ? n(x) : cnt('citation', x));
+      return `<li>${esc(t(R.metric === 'h' ? 'rk_step_h' : 'rk_step', { p, v: fmt(d.thr[p]), need: fmt(need) }))}${yrs ? ` <span class="rk-muted">${esc(t('rk_years', { y: cnt('year', yrs) }))}</span>` : ''}</li>`;
+    }).join('')}</ul>${pace > 0 ? `<p class="rk-small">${esc(t('rk_pace', { r: n(pace) }))}</p>` : ''}</div>` : (top <= 1 ? `<div class="rk-next"><p class="rk-h">${esc(t('rk_top1'))}</p></div>` : '');
+    body = `<div class="rk-score"><span class="rk-top">${esc(t('rk_top', { p: top }))}</span><span class="rk-sub">${esc(t('rk_place', { rank: n(rank), total: n(d.total) }))}</span></div>
+      <p class="rk-who">${esc(who)}${infoBtn(t('rk_title'), t('rk_note'))}</p>
+      <div class="rk-hist" role="img" aria-label="${esc(t('rk_hist_aria', { you: labs[mineBin] }))}">${bars}</div>
+      ${nextHtml}`;
+  }
+  return `${controls}${body}`;
+}
+function regionName(code) { try { return new Intl.DisplayNames([lang], { type: 'region' }).of(code) || code; } catch (e) { return code; } }
+
+function renderRank() {
+  const box = $('rank-box');
+  if (!box || !state.rank) return;
+  box.innerHTML = rankHtml();
+  const R = state.rank, again = () => { R.status = 'idle'; loadRank(); };
+  box.querySelectorAll('[data-rkm]').forEach((b) => b.onclick = () => { R.metric = b.dataset.rkm; again(); });
+  box.querySelectorAll('[data-rks]').forEach((b) => b.onclick = () => { R.scope = b.dataset.rks; again(); });
+  const act = $('rk-active'); if (act) act.onchange = (e) => { R.active = e.target.checked; again(); };
+  const sel = $('rk-inst'); if (sel) sel.onchange = (e) => { R.instIdx = +e.target.value; again(); };
+  const rt = $('rk-retry'); if (rt) rt.onclick = again;
+}
+
+/* ---------- Feedback (fereastră în colț, trimis prin Web3Forms) ---------- */
+const FB_ENDPOINT = 'https://api.web3forms.com/submit';
+const FB_WAIT_MS = 60 * 1000;
+let fbTopic = '', fbReturnFocus = null;
+
+function fbRefresh() {
+  const tp = $('fbtopic');
+  tp.hidden = fbTopic !== 'full' && fbTopic !== 'error';
+  tp.textContent = fbTopic === 'full' ? t('fb_topic_full') : fbTopic === 'error' ? t('fb_topic_error', { code: state.errInfo ? ' (' + state.errInfo + ')' : '' }) : '';
+  const has = !!state.author;
+  $('fbprofwrap').hidden = !has;
+  if (has) $('fbproftxt').textContent = t('fb_profile', { name: state.author.display_name });
+}
+function openFeedback(topic) {
+  if (!FEEDBACK_KEY) return;
+  fbTopic = topic || 'general';
+  fbReturnFocus = document.activeElement;
+  fbRefresh();
+  $('fbform').hidden = false; $('fbdone').hidden = true;
+  $('fbstatus').textContent = '';
+  $('fbpanel').hidden = false; $('fbbtn').hidden = true;
+  $('fbmsg').focus();
+}
+function closeFeedback() {
+  $('fbpanel').hidden = true;
+  if (FEEDBACK_KEY) $('fbbtn').hidden = false;
+  if (fbReturnFocus && fbReturnFocus.focus) fbReturnFocus.focus();
+}
+function fbDone() {
+  $('fbform').hidden = true; $('fbdone').hidden = false;
+  $('fbclose2').focus();
+}
+async function sendFeedback() {
+  const st = $('fbstatus');
+  const msg = $('fbmsg').value.trim(), email = $('fbemail').value.trim();
+  const fail = (key) => { st.className = 'fb-status'; st.textContent = t(key); };
+  if (msg.length < 5) return fail('fb_err_short');
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail('fb_err_email');
+  const last = store.get('fb_last');
+  if (last && Date.now() - last < FB_WAIT_MS) return fail('fb_err_wait');
+  if ($('fbhp').value) { $('fbmsg').value = ''; return fbDone(); }   // capcană pentru roboți: nu trimitem nimic
+
+  const payload = {
+    access_key: FEEDBACK_KEY,
+    subject: 'Cine m-a citat · feedback' + (fbTopic === 'full' ? ' · lista completă' : '') + (fbTopic === 'error' ? ' · eroare' : ''),
+    from_name: 'Cine m-a citat',
+    message: msg,
+    botcheck: '',
+    language: lang,
+    edition: FULL_LOAD ? 'full' : 'young researcher',
+    screen: window.innerWidth + 'x' + window.innerHeight,
+    browser: navigator.userAgent
+  };
+  if (fbTopic === 'error' && state.errInfo) payload.error = state.errInfo;
+  if (email) payload.email = email;
+  if ($('fbprof').checked && state.author) { payload.profile = state.author.display_name; payload.openalex_id = state.author.id; }
+
+  $('fbsend').disabled = true;
+  st.className = 'fb-status info'; st.textContent = t('fb_sending');
+  try {
+    const r = await fetch(FB_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(payload) });
+    const j = await r.json().catch(() => ({}));
+    if (!(r.ok && j.success)) throw new Error('rejected');
+    store.set('fb_last', Date.now());
+    $('fbmsg').value = ''; $('fbemail').value = ''; $('fbprof').checked = false; st.textContent = '';
+    fbDone();
+  } catch (e) {
+    st.className = 'fb-status';
+    if (FEEDBACK_EMAIL) {
+      const href = 'mailto:' + FEEDBACK_EMAIL + '?subject=' + encodeURIComponent(payload.subject) + '&body=' + encodeURIComponent(msg);
+      st.innerHTML = esc(t('fb_err_send_mail', { link: '\u0000' })).replace('\u0000', `<a href="${esc(href)}">${esc(t('fb_mail_link'))}</a>`);
+    } else st.textContent = t('fb_err_send');
+  } finally { $('fbsend').disabled = false; }
+}
+$('fbbtn').onclick = () => openFeedback('general');
+$('fbclose').onclick = closeFeedback;
+$('fbclose2').onclick = closeFeedback;
+$('fbsend').onclick = sendFeedback;
+$('fbmsg').addEventListener('keydown', (e) => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) sendFeedback(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('fbpanel').hidden) closeFeedback(); });
+document.addEventListener('click', (e) => {
+  const a = e.target.closest && e.target.closest('a[data-fb]');
+  if (a && FEEDBACK_KEY) { e.preventDefault(); openFeedback(a.dataset.fb); }
+});
+
+function onUnexpected(e) {
+  const err = e && (e.reason || e.error);
+  if (state.loading) showErrorState('unexpected', err && err.apiCode ? err : { message: String((err && err.message) || err || '') });
+}
+window.addEventListener('unhandledrejection', onUnexpected);
+window.addEventListener('error', onUnexpected);
+
+/* ---------- Pornire / Init ---------- */
+document.querySelectorAll('.langs button').forEach((b) => b.onclick = () => setLang(b.dataset.lang));
+function setTip(open) {
+  $('emailtip').classList.toggle('open', open);
+  $('tipbtn').setAttribute('aria-expanded', String(open));
+}
+$('tipbtn').addEventListener('click', (e) => { e.stopPropagation(); setTip(!$('emailtip').classList.contains('open')); });
+document.addEventListener('click', () => setTip(false));
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setTip(false); });
+
+$('go').onclick = start;
+$('q').addEventListener('keydown', (e) => { if (e.key === 'Enter') start(); });
+const savedPal = store.get('palette');
+if (savedPal && PALETTES.some((p) => p.id === savedPal)) document.documentElement.dataset.pal = savedPal;
+$('pals').addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-id]');
+  if (b) setPalette(b.dataset.id);
+});
+loadSjrFromStore();
+applyStatic();
+$('contact').hidden = !HAS_CONTACT;
+$('fbbtn').hidden = !FEEDBACK_KEY;
+$('edition').hidden = FULL_LOAD;
+
+loadSjrHosted();
+
+(async function init() {
+  // 1. link partajabil: ...?orcid=0000-0002-1825-0097
+  const fromUrl = parseOrcid(new URLSearchParams(location.search).get('orcid') || '');
+  if (fromUrl) { $('q').value = fromUrl; start(); return; }
+  // 2. ultimul profil deschis pe acest dispozitiv
+  const last = store.get('last');
+  if (last && last.id) {
+    $('q').value = last.orcid || last.label || '';
+    $('go').disabled = true;
+    showLoading({ display_name: last.label || '' });
+    try { await loadAuthor(await api('/authors/' + last.id)); }
+    catch (err) { errorStatus(err); }
+    $('go').disabled = false;
+  }
+})();
+</script>
+<script>
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+}
+</script>
+</body>
+</html>

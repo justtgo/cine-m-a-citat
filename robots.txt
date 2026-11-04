@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Disallow: /sjr-2025.json
