@@ -15,13 +15,13 @@
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="canonical" href="https://SITE-URL/">
+<link rel="canonical" href="https://who-cited-me.netlify.app/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Cine m-a citat">
 <meta property="og:title" content="Cine m-a citat · Who cited me">
 <meta property="og:description" content="Vezi cine te citează, fără să cauți: indicatori (h, i10), cuartile SCImago, poziția ta între colegi și exporturi Excel, Word și CSV. Gratuit, pe date OpenAlex. / See who cites you, without searching.">
-<meta property="og:url" content="https://SITE-URL/">
-<meta property="og:image" content="https://SITE-URL/og-image.png">
+<meta property="og:url" content="https://who-cited-me.netlify.app/">
+<meta property="og:image" content="https://who-cited-me.netlify.app/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Cine m-a citat: vezi cine te citează, fără să cauți">
@@ -30,7 +30,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Cine m-a citat · Who cited me">
 <meta name="twitter:description" content="Vezi cine te citează, fără să cauți: indicatori (h, i10), cuartile SCImago, poziția ta între colegi și exporturi Excel, Word și CSV. Gratuit, pe date OpenAlex. / See who cites you, without searching.">
-<meta name="twitter:image" content="https://SITE-URL/og-image.png">
+<meta name="twitter:image" content="https://who-cited-me.netlify.app/og-image.png">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "WebApplication", "name": "Cine m-a citat", "alternateName": "Who cited me", "url": "https://who-cited-me.netlify.app/",
+ "description": "Vezi cine te citează, fără să cauți: indicatori (h, i10), cuartile SCImago, poziția ta între colegi și exporturi Excel, Word și CSV. Gratuit, pe date OpenAlex. / See who cites you, without searching.", "applicationCategory": "EducationalApplication", "operatingSystem": "Any", "browserRequirements": "Requires JavaScript",
+ "inLanguage": ["ro", "en"], "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR"},
+ "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": "dusiosulalina@gmail.com", "availableLanguage": ["ro", "en"]}}
+</script>
 <style>
   :root {
     color-scheme: light;
@@ -455,7 +461,7 @@
 </head>
 <body>
 <noscript><div style="max-width:640px;margin:48px auto;padding:0 20px;font:16px/1.6 system-ui,sans-serif">
-<h1 style="font-family:Georgia,serif">Cine m-a citat</h1>
+<p style="font-family:Georgia,serif;font-size:1.6rem;font-weight:700;margin:0 0 12px">Cine m-a citat</p>
 <p>Aplicația are nevoie de JavaScript ca să funcționeze. Activează-l în browser și reîncarcă pagina.</p>
 <p>This app needs JavaScript to work. Please enable it in your browser and reload the page.</p></div></noscript>
 
@@ -471,8 +477,8 @@
 
 <main class="wrap">
   <section class="hero">
-    <h1 data-i18n="hero_title"></h1>
-    <p class="lede" data-i18n="hero_sub"></p>
+    <h1 data-i18n="hero_title">Vezi cine te citează, fără să cauți.</h1>
+    <p class="lede" data-i18n="hero_sub">Introdu ORCID-ul sau numele tău. Îți găsim lucrările și îți arătăm toate articolele care le citează.</p>
     <div class="search">
       <input type="text" id="q" data-i18n-ph="ph" data-i18n-aria="ph_aria" autocomplete="off">
       <button class="primary" id="go" data-i18n="go"></button>
